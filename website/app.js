@@ -25,8 +25,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 /*
  * CSS/JS
  */
-app.use('/uikit', express.static(__dirname + '/node_modules/uikit/bower_components/uikit/'));
-app.use('/jquery', express.static(__dirname + '/node_modules/uikit/bower_components/jquery/dist/'));
+app.use('/uikit', express.static(__dirname + '/bower_components/uikit/'));
+app.use('/jquery', express.static(__dirname + '/bower_components/jquery/dist/'));
 app.use('/font-awesome', express.static(__dirname + '/node_modules/font-awesome/'));
 
 app.use('/', routes);
