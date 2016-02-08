@@ -5,11 +5,23 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var partials = require('express-partials');
+var session = require('express-session');
+var FileStore = require('session-file-store')(session);
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+/*
+ * Sessions
+ */
+app.use(session({
+  store: new FileStore(),
+  secret: 'f8aYv9T1vb1749L',
+  resave: true,
+  saveUninitialized: false
+}));
 
 // view engine setup
 app.use(partials());
@@ -20,7 +32,9 @@ app.set('view engine', 'ejs');
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
