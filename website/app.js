@@ -46,7 +46,7 @@ app.use('/jquery', express.static(__dirname + '/bower_components/jquery/dist/'))
 app.use('/font-awesome', express.static(__dirname + '/node_modules/font-awesome/'));
 
 app.use('/', routes);
-app.use('/users', users);
+app.use('/user', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
