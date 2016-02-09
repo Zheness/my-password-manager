@@ -23,6 +23,10 @@ var uikitFieldHorizontal = function(name, object) {
 		if (object.widget.classes.indexOf('uk-form-danger') === -1) {
 			object.widget.classes.push('uk-form-danger');
 		}
+	} else {
+		if (object.widget.classes.indexOf('uk-form-danger') !== -1) {
+			object.widget.classes.pop('uk-form-danger');
+		}
 	}
 
 	var widget = object.widget.toHTML(name, object);
@@ -38,36 +42,46 @@ var form_sig_nup = forms.create({
 		widget: widgets.text({
 			classes: ['uk-form-width-medium']
 		}),
+		validators: [
+			validators.rangelength(2, 60)
+		]
 	}),
 	last_name: fields.string({
 		required: true,
 		widget: widgets.text({
 			classes: ['uk-form-width-medium']
 		}),
-
+		validators: [
+			validators.rangelength(2, 60)
+		]
 	}),
 	email: fields.email({
 		required: true,
 		widget: widgets.text({
 			classes: ['uk-form-width-large']
 		}),
-
 	}),
 	password: fields.password({
 		required: true,
-		widget: widgets.text({
+		widget: widgets.password({
 			classes: ['uk-form-width-medium']
 		}),
-
+		validators: [
+			validators.rangelength(4, 60)
+		]
 	}),
 	confirm: fields.password({
 		required: true,
-		validators: [validators.matchField('password')],
-		widget: widgets.text({
+		validators: [
+			validators.matchField('password')
+		],
+		widget: widgets.password({
 			classes: ['uk-form-width-medium']
 		}),
 
 	}),
+}, {
+	validatePastFirstError: true
 });
 
 router.get('/', function(req, res, next) {
@@ -89,26 +103,31 @@ router.post('/sign-up', function(req, res, next) {
 
 	form.handle(req, {
 		success: function(form) {
-			// there is a request and the form is valid 
-			// form.data contains the submitted data 
 			console.log("data valid");
+			res.render('user/sign-up', {
+				title: 'Sign up',
+				myForm: form,
+				uikitFieldHorizontal: uikitFieldHorizontal
+			});
 		},
 		error: function(form) {
-			// the data in the request didn't validate, 
-			// calling form.toHTML() again will render the error messages 
 			console.log("data invalid");
+			res.render('user/sign-up', {
+				title: 'Sign up',
+				myForm: form,
+				uikitFieldHorizontal: uikitFieldHorizontal
+			});
 		},
 		empty: function(form) {
-			// there was no form data in the request 
 			console.log("no send");
+			res.render('user/sign-up', {
+				title: 'Sign up',
+				myForm: form,
+				uikitFieldHorizontal: uikitFieldHorizontal
+			});
 		}
 	});
 
-	res.render('user/sign-up', {
-		title: 'Sign up',
-		myForm: form,
-		uikitFieldHorizontal: uikitFieldHorizontal
-	});
 });
 
 module.exports = router;
