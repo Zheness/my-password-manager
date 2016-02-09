@@ -7,11 +7,25 @@ var bodyParser = require('body-parser');
 var partials = require('express-partials');
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
+var mongoose = require('mongoose');
+var connection = mongoose.createConnection('mongodb://@localhost:27017/mypasswordmanager');
+var models = require('./models');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+/*
+ * Database
+ */
+connection.on('error', console.error.bind(console, 'connection error:'));
+app.use(function(req, res, next) {
+  req.models = {
+    User: connection.model('User', models.User, 'users')
+  };
+  next();
+});
 
 /*
  * Sessions
@@ -28,7 +42,6 @@ app.use(partials());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
