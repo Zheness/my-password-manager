@@ -4,6 +4,7 @@ var forms = require('forms');
 var fields = forms.fields;
 var validators = forms.validators;
 var widgets = forms.widgets;
+var CryptoJS = require("crypto-js");
 
 /*
  * Forms helpers
@@ -36,7 +37,7 @@ var uikitFieldHorizontal = function(name, object) {
 /*
  * Forms
  */
-var form_sig_nup = forms.create({
+var form_sign_up = forms.create({
 	first_name: fields.string({
 		required: true,
 		widget: widgets.text({
@@ -89,7 +90,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/sign-up', function(req, res, next) {
-	var form = form_sig_nup;
+	var form = form_sign_up;
 
 	res.render('user/sign-up', {
 		title: 'Sign up',
@@ -99,11 +100,23 @@ router.get('/sign-up', function(req, res, next) {
 });
 
 router.post('/sign-up', function(req, res, next) {
-	var form = form_sig_nup;
-
+	var form = form_sign_up;
 	form.handle(req, {
 		success: function(form) {
-			console.log("data valid");
+			var new_user = new req.models.User({
+				first_name: form.data.first_name,
+				last_name: form.data.last_name,
+				email: form.data.email,
+				password: CryptoJS.SHA1(form.data.password).toString()
+			});
+			new_user.save(function(err) {
+				if (err) return console.error(err);
+				res.render('user/sign-up', {
+					title: 'Sign up',
+					myForm: form,
+					uikitFieldHorizontal: uikitFieldHorizontal
+				});
+			});
 			res.render('user/sign-up', {
 				title: 'Sign up',
 				myForm: form,
