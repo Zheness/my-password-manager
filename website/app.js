@@ -10,6 +10,7 @@ var FileStore = require('session-file-store')(session);
 var mongoose = require('mongoose');
 var connection = mongoose.createConnection('mongodb://@localhost:27017/mypasswordmanager');
 var models = require('./models');
+var flash = require("flash");
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -36,6 +37,11 @@ app.use(session({
   resave: true,
   saveUninitialized: false
 }));
+
+/*
+ * Flash messages (must be after Sessions)
+ */
+app.use(flash());
 
 // view engine setup
 app.use(partials());

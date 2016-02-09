@@ -111,19 +111,16 @@ router.post('/sign-up', function(req, res, next) {
 			});
 			new_user.save(function(err) {
 				if (err) return console.error(err);
+				req.flash("success", "Your account has been created");
 				res.render('user/sign-up', {
 					title: 'Sign up',
 					myForm: form,
 					uikitFieldHorizontal: uikitFieldHorizontal
 				});
 			});
-			res.render('user/sign-up', {
-				title: 'Sign up',
-				myForm: form,
-				uikitFieldHorizontal: uikitFieldHorizontal
-			});
 		},
 		error: function(form) {
+			req.flash("danger", "Data invalid!");
 			console.log("data invalid");
 			res.render('user/sign-up', {
 				title: 'Sign up',
