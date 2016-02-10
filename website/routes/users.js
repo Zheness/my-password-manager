@@ -107,16 +107,14 @@ router.post('/sign-up', function(req, res, next) {
 				first_name: form.data.first_name,
 				last_name: form.data.last_name,
 				email: form.data.email,
-				password: CryptoJS.SHA1(form.data.password).toString()
+				password: CryptoJS.SHA1(form.data.password).toString(),
+				status: req.user_status.mustCreateMainPassword.value,
+				main_password: ""
 			});
 			new_user.save(function(err) {
 				if (err) return console.error(err);
 				req.flash("success", "Your account has been created");
-				res.render('user/sign-up', {
-					title: 'Sign up',
-					myForm: form,
-					uikitFieldHorizontal: uikitFieldHorizontal
-				});
+				res.redirect("/user/sign-up-step-2");
 			});
 		},
 		error: function(form) {
@@ -138,6 +136,16 @@ router.post('/sign-up', function(req, res, next) {
 		}
 	});
 
+});
+
+router.get('/sign-up-step-2', function(req, res, next) {
+	var form = form_sign_up;
+
+	res.render('user/sign-up', {
+		title: 'Create your main password',
+		myForm: form,
+		uikitFieldHorizontal: uikitFieldHorizontal
+	});
 });
 
 module.exports = router;

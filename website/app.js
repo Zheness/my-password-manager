@@ -11,6 +11,7 @@ var mongoose = require('mongoose');
 var connection = mongoose.createConnection('mongodb://@localhost:27017/mypasswordmanager');
 var models = require('./models');
 var flash = require("flash");
+var Enum = require('enum');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -42,6 +43,14 @@ app.use(session({
  * Flash messages (must be after Sessions)
  */
 app.use(flash());
+
+/*
+ * Enum
+ */
+app.use(function(req, res, next) {
+  req.user_status = new Enum(["mustCreateMainPassword", "active"]);
+  next();
+});
 
 // view engine setup
 app.use(partials());
