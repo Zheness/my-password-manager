@@ -85,6 +85,30 @@ var form_sign_up = forms.create({
 	validatePastFirstError: true
 });
 
+var form_create_main_password = forms.create({
+	password: fields.password({
+		required: true,
+		widget: widgets.password({
+			classes: ['uk-form-width-large']
+		}),
+		validators: [
+			validators.rangelength(4, 80)
+		]
+	}),
+	confirm: fields.password({
+		required: true,
+		validators: [
+			validators.matchField('password')
+		],
+		widget: widgets.password({
+			classes: ['uk-form-width-large']
+		}),
+
+	}),
+}, {
+	validatePastFirstError: true
+});
+
 router.get('/', function(req, res, next) {
 	res.send('respond with a resource');
 });
@@ -113,13 +137,13 @@ router.post('/sign-up', function(req, res, next) {
 			});
 			new_user.save(function(err) {
 				if (err) return console.error(err);
+				req.session.user_id = new_user._id;
 				req.flash("success", "Your account has been created");
 				res.redirect("/user/sign-up-step-2");
 			});
 		},
 		error: function(form) {
-			req.flash("danger", "Data invalid!");
-			console.log("data invalid");
+			req.flash("danger", "The form contains errors");
 			res.render('user/sign-up', {
 				title: 'Sign up',
 				myForm: form,
@@ -127,7 +151,6 @@ router.post('/sign-up', function(req, res, next) {
 			});
 		},
 		empty: function(form) {
-			console.log("no send");
 			res.render('user/sign-up', {
 				title: 'Sign up',
 				myForm: form,
@@ -135,16 +158,71 @@ router.post('/sign-up', function(req, res, next) {
 			});
 		}
 	});
-
 });
 
 router.get('/sign-up-step-2', function(req, res, next) {
-	var form = form_sign_up;
+	if (!req.session.user_id) {
+		return res.redirect("/user/sign-in");
+	}
+	var form = form_create_main_password;
 
-	res.render('user/sign-up', {
+	res.render('user/sign-up-step-2', {
 		title: 'Create your main password',
 		myForm: form,
 		uikitFieldHorizontal: uikitFieldHorizontal
+	});
+});
+
+router.post('/sign-up-step-2', function(req, res, next) {
+	if (!req.session.user_id) {
+		return res.redirect("/user/sign-in");
+	}
+	var form = form_create_main_password;
+	form.handle(req, {
+		success: function(form) {
+			var generatePassword = require("password-maker");
+
+			// Private key, never known
+			var private_key = generatePassword(32);
+
+			var main_password = CryptoJS.AES.encrypt(private_key, form.data.password);
+			var unlocked_token = CryptoJS.AES.encrypt('unlocked', private_key);
+
+			req.models.User.findOne({
+				_id: req.session.user_id
+			}, function(err, user) {
+				if (err) return console.error(err);
+				user.main_password = main_password;
+				user.unlocked_token = unlocked_token;
+				user.status = req.user_status.active.value;
+				user.save(function(err) {
+					if (err) return console.error(err);
+					req.flash("success", "Your main password has been set");
+					res.redirect("/user/sign-up-step-3");
+				});
+			});
+		},
+		error: function(form) {
+			req.flash("danger", "The form contains errors");
+			res.render('user/sign-up-step-2', {
+				title: 'Create your main password',
+				myForm: form,
+				uikitFieldHorizontal: uikitFieldHorizontal
+			});
+		},
+		empty: function(form) {
+			res.render('user/sign-up-step-2', {
+				title: 'Create your main password',
+				myForm: form,
+				uikitFieldHorizontal: uikitFieldHorizontal
+			});
+		}
+	});
+});
+
+router.get('/sign-up-step-3', function(req, res, next) {
+	res.render('user/sign-up-step-3', {
+		title: 'Welcome!'
 	});
 });
 

@@ -23,20 +23,20 @@ var app = express();
  */
 connection.on('error', console.error.bind(console, 'connection error:'));
 app.use(function(req, res, next) {
-  req.models = {
-    User: connection.model('User', models.User, 'users')
-  };
-  next();
+	req.models = {
+		User: connection.model('User', models.User, 'users')
+	};
+	next();
 });
 
 /*
  * Sessions
  */
 app.use(session({
-  store: new FileStore(),
-  secret: 'f8aYv9T1vb1749L',
-  resave: true,
-  saveUninitialized: false
+	store: new FileStore(),
+	secret: 'f8aYv9T1vb1749L',
+	resave: true,
+	saveUninitialized: false
 }));
 
 /*
@@ -48,8 +48,28 @@ app.use(flash());
  * Enum
  */
 app.use(function(req, res, next) {
-  req.user_status = new Enum(["mustCreateMainPassword", "active"]);
-  next();
+	req.user_status = new Enum(["mustCreateMainPassword", "active"]);
+	next();
+});
+
+/*
+ * User infos if connected
+ */
+app.use(function(req, res, next) {
+	if (req.session.user_id) {
+		req.models.User.findOne({
+				_id: req.session.user_id
+			},
+			'first_name _id',
+			function(err, user) {
+				if (err) return console.error(err);
+				res.locals.user_infos = user;
+				next();
+			});
+	} else {
+		res.locals.user_infos = null;
+		next();
+	}
 });
 
 // view engine setup
@@ -61,7 +81,7 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-  extended: false
+	extended: false
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -78,9 +98,9 @@ app.use('/user', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+	var err = new Error('Not Found');
+	err.status = 404;
+	next(err);
 });
 
 // error handlers
@@ -88,23 +108,23 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
-  });
+	app.use(function(err, req, res, next) {
+		res.status(err.status || 500);
+		res.render('error', {
+			message: err.message,
+			error: err
+		});
+	});
 }
 
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+	res.status(err.status || 500);
+	res.render('error', {
+		message: err.message,
+		error: {}
+	});
 });
 
 
