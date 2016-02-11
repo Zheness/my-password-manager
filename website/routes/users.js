@@ -226,4 +226,12 @@ router.get('/sign-up-step-3', function(req, res, next) {
 	});
 });
 
+router.get('/sign-out', function(req, res, next) {
+	req.session.destroy(function(err) {
+		if (err) return console.error(err);
+	});
+	req.flash("info", "You are now logged out");
+	res.redirect("/");
+});
+
 module.exports = router;
