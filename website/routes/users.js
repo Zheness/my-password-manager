@@ -155,20 +155,34 @@ router.post('/sign-up', function(req, res, next) {
 	var form = form_sign_up;
 	form.handle(req, {
 		success: function(form) {
-			var new_user = new req.models.User({
-				first_name: form.data.first_name,
-				last_name: form.data.last_name,
-				email: form.data.email,
-				password: CryptoJS.SHA1(form.data.password).toString(),
-				status: req.user_status.mustCreateMainPassword.value,
-				main_password: ""
-			});
-			new_user.save(function(err) {
+			req.models.User.findOne({
+				email: form.data.email
+			}, function(err, user) {
 				if (err) return console.error(err);
-				req.session.user_id = new_user._id;
-				req.flash("success", "Your account has been created");
-				res.redirect("/user/sign-up-step-2");
-			});
+				if (user === null) {
+					var new_user = new req.models.User({
+						first_name: form.data.first_name,
+						last_name: form.data.last_name,
+						email: form.data.email,
+						password: CryptoJS.SHA1(form.data.password).toString(),
+						status: req.user_status.mustCreateMainPassword.value,
+						main_password: ""
+					});
+					new_user.save(function(err) {
+						if (err) return console.error(err);
+						req.session.user_id = new_user._id;
+						req.flash("success", "Your account has been created");
+						res.redirect("/user/sign-up-step-2");
+					});
+				} else {
+					req.flash("danger", "This email is already used");
+					res.render('user/sign-up', {
+						title: 'Sign up',
+						myForm: form,
+						uikitFieldHorizontal: uikitFieldHorizontal
+					});
+				}
+			})
 		},
 		error: function(form) {
 			req.flash("danger", "The form contains errors");
@@ -276,9 +290,7 @@ router.get('/sign-up-step-3', function(req, res, next) {
 });
 
 router.get('/sign-out', function(req, res, next) {
-	req.session.destroy(function(err) {
-		if (err) return console.error(err);
-	});
+	req.session.user_id = undefined;
 	req.flash("info", "You are now logged out");
 	res.redirect("/");
 });
