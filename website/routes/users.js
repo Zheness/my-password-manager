@@ -109,6 +109,26 @@ var form_create_main_password = forms.create({
 	validatePastFirstError: true
 });
 
+var form_sign_in = forms.create({
+	email: fields.email({
+		required: true,
+		widget: widgets.text({
+			classes: ['uk-form-width-large']
+		}),
+	}),
+	password: fields.password({
+		required: true,
+		widget: widgets.password({
+			classes: ['uk-form-width-medium']
+		}),
+		validators: [
+			validators.rangelength(4, 80)
+		]
+	})
+}, {
+	validatePastFirstError: true
+});
+
 router.get('/', function(req, res, next) {
 	res.send('respond with a resource');
 });
@@ -261,6 +281,65 @@ router.get('/sign-out', function(req, res, next) {
 	});
 	req.flash("info", "You are now logged out");
 	res.redirect("/");
+});
+
+router.get('/sign-in', function(req, res, next) {
+	if (req.session.user_id) {
+		req.flash("warning", "You are already signed in");
+		return res.redirect("/");
+	}
+	var form = form_sign_in;
+
+	res.render('user/sign-in', {
+		title: 'Sign in',
+		myForm: form,
+		uikitFieldHorizontal: uikitFieldHorizontal
+	});
+});
+
+router.post('/sign-in', function(req, res, next) {
+	if (req.session.user_id) {
+		req.flash("warning", "You are already signed in");
+		return res.redirect("/");
+	}
+	var form = form_sign_in;
+	form.handle(req, {
+		success: function(form) {
+			req.models.User.findOne({
+				email: form.data.email,
+				password: CryptoJS.SHA1(form.data.password).toString()
+			}, function(err, user) {
+				if (err) return console.error(err);
+				if (user !== null) {
+					req.session.user_id = user._id;
+					req.flash("success", "Your are now logged in");
+					res.redirect("/");
+				} else {
+					req.flash("warning", "No account found with these credentials");
+					res.render('user/sign-in', {
+						title: 'Sign in',
+						myForm: form,
+						uikitFieldHorizontal: uikitFieldHorizontal
+					});
+				}
+			});
+		},
+		error: function(form) {
+			req.flash("danger", "The form contains errors");
+			res.render('user/sign-in', {
+				title: 'Sign in',
+				myForm: form,
+				uikitFieldHorizontal: uikitFieldHorizontal
+			});
+		},
+		empty: function(form) {
+			res.render('user/sign-in', {
+				title: 'Sign in',
+				myForm: form,
+				uikitFieldHorizontal: uikitFieldHorizontal
+			});
+		}
+	});
 });
 
 module.exports = router;
