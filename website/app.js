@@ -60,7 +60,7 @@ app.use(function(req, res, next) {
 		req.models.User.findOne({
 				_id: req.session.user_id
 			},
-			'first_name _id',
+			'first_name _id status',
 			function(err, user) {
 				if (err) return console.error(err);
 				res.locals.user_infos = user;

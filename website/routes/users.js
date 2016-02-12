@@ -114,6 +114,10 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/sign-up', function(req, res, next) {
+	if (req.session.user_id) {
+		req.flash("warning", "You are already signed in");
+		return res.redirect("/");
+	}
 	var form = form_sign_up;
 
 	res.render('user/sign-up', {
@@ -124,6 +128,10 @@ router.get('/sign-up', function(req, res, next) {
 });
 
 router.post('/sign-up', function(req, res, next) {
+	if (req.session.user_id) {
+		req.flash("warning", "You are already signed in");
+		return res.redirect("/");
+	}
 	var form = form_sign_up;
 	form.handle(req, {
 		success: function(form) {
@@ -162,7 +170,13 @@ router.post('/sign-up', function(req, res, next) {
 
 router.get('/sign-up-step-2', function(req, res, next) {
 	if (!req.session.user_id) {
+		req.flash("danger", "You must be logged in to access this page");
 		return res.redirect("/user/sign-in");
+	} else {
+		if (res.locals.user_infos.status != req.user_status.mustCreateMainPassword.value) {
+			req.flash("warning", "You do not have the permission to access this page");
+			return res.redirect("/");
+		}
 	}
 	var form = form_create_main_password;
 
@@ -175,7 +189,13 @@ router.get('/sign-up-step-2', function(req, res, next) {
 
 router.post('/sign-up-step-2', function(req, res, next) {
 	if (!req.session.user_id) {
+		req.flash("danger", "You must be logged in to access this page");
 		return res.redirect("/user/sign-in");
+	} else {
+		if (res.locals.user_infos.status != req.user_status.mustCreateMainPassword.value) {
+			req.flash("warning", "You do not have the permission to access this page");
+			return res.redirect("/");
+		}
 	}
 	var form = form_create_main_password;
 	form.handle(req, {
@@ -221,6 +241,15 @@ router.post('/sign-up-step-2', function(req, res, next) {
 });
 
 router.get('/sign-up-step-3', function(req, res, next) {
+	if (!req.session.user_id) {
+		req.flash("danger", "You must be logged in to access this page");
+		return res.redirect("/user/sign-in");
+	} else {
+		if (res.locals.user_infos.status != req.user_status.active.value) {
+			req.flash("warning", "You do not have the permission to access this page");
+			return res.redirect("/");
+		}
+	}
 	res.render('user/sign-up-step-3', {
 		title: 'Welcome!'
 	});
