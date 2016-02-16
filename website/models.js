@@ -11,5 +11,7 @@ exports.User = new mongoose.Schema({
 		default: Date.now
 	},
 	main_password: String,
-	unlocked_token: String
+	unlocked_token: String,
+	tmp_pk: String,
+	dateLastAction: Date,
 });

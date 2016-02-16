@@ -52,26 +52,6 @@ app.use(function(req, res, next) {
 	next();
 });
 
-/*
- * User infos if connected
- */
-app.use(function(req, res, next) {
-	if (req.session.user_id) {
-		req.models.User.findOne({
-				_id: req.session.user_id
-			},
-			'first_name _id status',
-			function(err, user) {
-				if (err) return console.error(err);
-				res.locals.user_infos = user;
-				next();
-			});
-	} else {
-		res.locals.user_infos = null;
-		next();
-	}
-});
-
 // view engine setup
 app.use(partials());
 app.set('views', path.join(__dirname, 'views'));
@@ -92,6 +72,38 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uikit', express.static(__dirname + '/bower_components/uikit/'));
 app.use('/jquery', express.static(__dirname + '/bower_components/jquery/dist/'));
 app.use('/font-awesome', express.static(__dirname + '/node_modules/font-awesome/'));
+
+/*
+ * User infos if connected
+ */
+app.use(function(req, res, next) {
+	req.isTimeOver = false;
+	res.locals.user_infos = null;
+	if (req.session.user_id) {
+		req.models.User.findOne({
+				_id: req.session.user_id
+			},
+			'first_name _id status dateLastAction',
+			function(err, user) {
+				if (err) return console.error(err);
+				res.locals.user_infos = user;
+				var difference = Date.now() - user.dateLastAction.getTime();
+				var resultInMinutes = Math.round(difference / 60000);
+				if (resultInMinutes >= 5) {
+					req.isTimeOver = true;
+					if (req.path != "/unlock" && req.path != "/user/sign-out")
+						res.redirect("/unlock");
+					next();
+				} else {
+					user.dateLastAction = Date.now();
+					user.save(function(err) {});
+					next();
+				}
+			});
+	} else {
+		next();
+	}
+});
 
 app.use('/', routes);
 app.use('/user', users);
