@@ -92,7 +92,7 @@ app.use(function(req, res, next) {
 				if (resultInMinutes >= 5) {
 					req.isTimeOver = true;
 					if (req.path != "/unlock" && req.path != "/user/sign-out")
-						res.redirect("/unlock");
+						return res.redirect("/unlock");
 					next();
 				} else {
 					user.dateLastAction = Date.now();

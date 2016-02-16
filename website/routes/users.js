@@ -324,6 +324,8 @@ router.post('/sign-in', function(req, res, next) {
 				if (err) return console.error(err);
 				if (user !== null) {
 					req.session.user_id = user._id;
+					user.dateLastAction = 0;
+					user.save(function(err) {});
 					req.flash("success", "Your are now logged in");
 					res.redirect("/");
 				} else {
