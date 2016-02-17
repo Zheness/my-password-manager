@@ -211,3 +211,36 @@ exports.form_settings_email = forms.create({
 }, {
 	validatePastFirstError: true
 });
+
+exports.form_settings_main_password = forms.create({
+	current_main_password: fields.password({
+		required: true,
+		widget: widgets.password({
+			classes: ['uk-form-width-large']
+		}),
+		validators: [
+			validators.rangelength(4, 80)
+		]
+	}),
+	new_main_password: fields.password({
+		required: true,
+		widget: widgets.password({
+			classes: ['uk-form-width-large']
+		}),
+		validators: [
+			validators.rangelength(4, 80)
+		]
+	}),
+	confirm: fields.password({
+		required: true,
+		validators: [
+			validators.matchField('new_main_password')
+		],
+		widget: widgets.password({
+			classes: ['uk-form-width-large']
+		}),
+
+	}),
+}, {
+	validatePastFirstError: true
+});

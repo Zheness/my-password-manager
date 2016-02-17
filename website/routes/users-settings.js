@@ -160,4 +160,54 @@ router.post('/email', function(req, res, next) {
 	});
 });
 
+router.get('/main-password', function(req, res, next) {
+	if (!req.session.user_id) {
+		req.flash("warning", "You must be logged in to access this page");
+		return res.redirect("/user/sign-in");
+	}
+	var form = forms.form_settings_main_password;
+
+	return reloadPage(res, form, "Edit your main password", "user/settings-main-password");
+});
+
+router.post('/main-password', function(req, res, next) {
+	if (!req.session.user_id) {
+		req.flash("warning", "You must be logged in to access this page");
+		return res.redirect("/user/sign-in");
+	}
+	var form = forms.form_settings_main_password;
+
+	form.handle(req, {
+		success: function(form) {
+			req.models.User.findOne({
+				_id: req.session.user_id
+			}, function(err, user) {
+				if (err) return console.error(err);
+				var pv_key = CryptoJS.AES.decrypt(user.main_password.toString(), form.data.current_main_password).toString(CryptoJS.enc.Utf8);
+				var is_unlocked = CryptoJS.AES.decrypt(user.unlocked_token.toString(), pv_key).toString(CryptoJS.enc.Utf8);
+
+				if (is_unlocked == "unlocked") {
+					user.main_password = CryptoJS.AES.encrypt(pv_key, form.data.new_main_password);
+					user.dateLastAction = 0;
+					user.save(function(err) {
+						if (err) return console.error(err);
+						req.flash("success", "Your main password has been saved");
+						return res.redirect("/unlock");
+					});
+				} else {
+					req.flash("danger", "Your current main password is incorrect");
+					return reloadPage(res, form, "Edit your main password", "user/settings-main-password");
+				}
+			});
+		},
+		error: function(form) {
+			req.flash("danger", "The form contains errors");
+			return reloadPage(res, form, "Edit your main password", "user/settings-main-password");
+		},
+		empty: function(form) {
+			return reloadPage(res, form, "Edit your main password", "user/settings-main-password");
+		}
+	});
+});
+
 module.exports = router;
