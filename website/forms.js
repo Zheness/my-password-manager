@@ -125,3 +125,26 @@ exports.form_sign_in = forms.create({
 }, {
 	validatePastFirstError: true
 });
+
+exports.form_settings_info = forms.create({
+	first_name: fields.string({
+		required: true,
+		widget: widgets.text({
+			classes: ['uk-form-width-medium']
+		}),
+		validators: [
+			validators.rangelength(2, 60)
+		]
+	}),
+	last_name: fields.string({
+		required: true,
+		widget: widgets.text({
+			classes: ['uk-form-width-medium']
+		}),
+		validators: [
+			validators.rangelength(2, 60)
+		]
+	})
+}, {
+	validatePastFirstError: true
+});
