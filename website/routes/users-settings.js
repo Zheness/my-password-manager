@@ -27,11 +27,7 @@ router.get('/info', function(req, res, next) {
 			last_name: user.last_name
 		});
 
-		res.render('user/settings-info', {
-			title: 'Edit your infos',
-			myForm: form,
-			uikitFieldHorizontal: forms.uikitFieldHorizontal
-		});
+		return reloadPage(res, form, "Edit your infos", "user/settings-info");
 	});
 });
 
@@ -69,7 +65,49 @@ router.post('/info', function(req, res, next) {
 });
 
 router.get('/password', function(req, res, next) {
-	res.send('respond with a resource');
+	if (!req.session.user_id) {
+		req.flash("warning", "You must be logged in to access this page");
+		return res.redirect("/user/sign-in");
+	}
+	var form = forms.form_settings_password;
+
+	return reloadPage(res, form, "Edit your password", "user/settings-password");
+});
+
+router.post('/password', function(req, res, next) {
+	if (!req.session.user_id) {
+		req.flash("warning", "You must be logged in to access this page");
+		return res.redirect("/user/sign-in");
+	}
+	var form = forms.form_settings_password;
+
+	form.handle(req, {
+		success: function(form) {
+			req.models.User.findOne({
+				_id: req.session.user_id,
+				password: CryptoJS.SHA1(form.data.current_password).toString()
+			}, function(err, user) {
+				if (user !== null) {
+					user.password = CryptoJS.SHA1(form.data.new_password).toString();
+					user.save(function(err) {
+						if (err) return console.error(err);
+						req.flash("success", "Your password has been saved");
+						return reloadPage(res, form, "Edit your password", "user/settings-password");
+					});
+				} else {
+					req.flash("danger", "Your current password is incorrect");
+					return reloadPage(res, form, "Edit your password", "user/settings-password");
+				}
+			});
+		},
+		error: function(form) {
+			req.flash("danger", "The form contains errors");
+			return reloadPage(res, form, "Edit your password", "user/settings-password");
+		},
+		empty: function(form) {
+			return reloadPage(res, form, "Edit your password", "user/settings-password");
+		}
+	});
 });
 
 router.get('/email', function(req, res, next) {
