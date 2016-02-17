@@ -15,6 +15,7 @@ var Enum = require('enum');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var users_settings = require('./routes/users-settings');
 
 var app = express();
 
@@ -107,6 +108,7 @@ app.use(function(req, res, next) {
 
 app.use('/', routes);
 app.use('/user', users);
+app.use('/user/settings', users_settings);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

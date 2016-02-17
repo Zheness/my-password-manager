@@ -129,10 +129,6 @@ var form_sign_in = forms.create({
 	validatePastFirstError: true
 });
 
-router.get('/', function(req, res, next) {
-	res.send('respond with a resource');
-});
-
 router.get('/sign-up', function(req, res, next) {
 	if (req.session.user_id) {
 		req.flash("warning", "You are already signed in");
