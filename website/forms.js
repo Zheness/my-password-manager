@@ -181,3 +181,33 @@ exports.form_settings_password = forms.create({
 }, {
 	validatePastFirstError: true
 });
+
+exports.form_settings_email = forms.create({
+	password: fields.password({
+		required: true,
+		widget: widgets.password({
+			classes: ['uk-form-width-large']
+		}),
+		validators: [
+			validators.rangelength(4, 80)
+		]
+	}),
+	email: fields.email({
+		required: true,
+		widget: widgets.email({
+			classes: ['uk-form-width-large']
+		}),
+	}),
+	confirm: fields.email({
+		required: true,
+		validators: [
+			validators.matchField('email')
+		],
+		widget: widgets.email({
+			classes: ['uk-form-width-large']
+		}),
+
+	}),
+}, {
+	validatePastFirstError: true
+});

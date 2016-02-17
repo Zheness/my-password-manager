@@ -111,11 +111,53 @@ router.post('/password', function(req, res, next) {
 });
 
 router.get('/email', function(req, res, next) {
-	res.send('respond with a resource');
+	if (!req.session.user_id) {
+		req.flash("warning", "You must be logged in to access this page");
+		return res.redirect("/user/sign-in");
+	}
+	var form = forms.form_settings_email;
+
+	return reloadPage(res, form, "Edit your email", "user/settings-email");
 });
 
-router.get('/main-password', function(req, res, next) {
-	res.send('respond with a resource');
+router.post('/email', function(req, res, next) {
+	if (!req.session.user_id) {
+		req.flash("warning", "You must be logged in to access this page");
+		return res.redirect("/user/sign-in");
+	}
+	var form = forms.form_settings_email;
+
+	form.handle(req, {
+		success: function(form) {
+			req.models.User.findOne({
+				_id: req.session.user_id,
+				password: CryptoJS.SHA1(form.data.password).toString()
+			}, function(err, user) {
+				if (user !== null) {
+					user.email = form.data.email;
+					user.save(function(err) {
+						if (err) return console.error(err);
+						form = form.bind({
+							email: "",
+							confirm: "",
+						});
+						req.flash("success", "Your email has been saved");
+						return reloadPage(res, form, "Edit your email", "user/settings-email");
+					});
+				} else {
+					req.flash("danger", "Your current password is incorrect");
+					return reloadPage(res, form, "Edit your email", "user/settings-email");
+				}
+			});
+		},
+		error: function(form) {
+			req.flash("danger", "The form contains errors");
+			return reloadPage(res, form, "Edit your email", "user/settings-email");
+		},
+		empty: function(form) {
+			return reloadPage(res, form, "Edit your email", "user/settings-email");
+		}
+	});
 });
 
 module.exports = router;
