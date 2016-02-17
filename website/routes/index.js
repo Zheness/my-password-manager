@@ -64,9 +64,7 @@ router.post('/unlock', function(req, res, next) {
 				if (err) return console.error(err);
 				req.session.password = CryptoJS.AES.decrypt(pv_key.toString(), tmp_private_key).toString(CryptoJS.enc.Utf8);
 				req.flash("success", "The app is now unlocked");
-				res.render('unlock', {
-					title: 'Unlock'
-				});
+				res.redirect("/");
 			});
 		} else {
 			req.flash("danger", "The main password is wrong");

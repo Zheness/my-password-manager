@@ -198,7 +198,7 @@ router.post('/sign-in', function(req, res, next) {
 					user.dateLastAction = 0;
 					user.save(function(err) {});
 					req.flash("success", "Your are now logged in");
-					res.redirect("/");
+					res.redirect("/unlock");
 				} else {
 					req.flash("warning", "No account found with these credentials");
 					res.render('user/sign-in', {
