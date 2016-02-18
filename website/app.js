@@ -16,6 +16,7 @@ var Enum = require('enum');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var users_settings = require('./routes/users-settings');
+var items = require('./routes/items');
 
 var app = express();
 
@@ -25,7 +26,8 @@ var app = express();
 connection.on('error', console.error.bind(console, 'connection error:'));
 app.use(function(req, res, next) {
 	req.models = {
-		User: connection.model('User', models.User, 'users')
+		User: connection.model('User', models.User, 'users'),
+		Item: connection.model('Item', models.Item, 'items')
 	};
 	next();
 });
@@ -90,7 +92,7 @@ app.use(function(req, res, next) {
 				res.locals.user_infos = user;
 				var difference = Date.now() - user.dateLastAction.getTime();
 				var resultInMinutes = Math.round(difference / 60000);
-				if (resultInMinutes >= 5) {
+				if (resultInMinutes >= 60) { // TODO change in prod
 					req.isTimeOver = true;
 					if (req.path != "/unlock" && req.path != "/user/sign-out")
 						return res.redirect("/unlock");
@@ -107,6 +109,7 @@ app.use(function(req, res, next) {
 });
 
 app.use('/', routes);
+app.use('/item', items);
 app.use('/user', users);
 app.use('/user/settings', users_settings);
 

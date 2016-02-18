@@ -62,12 +62,13 @@ router.post('/unlock', function(req, res, next) {
 			var generatePassword = require("password-maker");
 
 			// Session tmp private key, used for cookies
-			var tmp_private_key = generatePassword(32);
+			var tmp_private_key = generatePassword(21);
 			user.tmp_pk = tmp_private_key;
 			user.dateLastAction = Date.now();
 			user.save(function(err) {
 				if (err) return console.error(err);
-				req.session.password = CryptoJS.AES.encrypt(pv_key.toString(), tmp_private_key).toString(CryptoJS.enc.Utf8);
+				req.session.password = CryptoJS.AES.encrypt(pv_key, tmp_private_key).toString();
+
 				req.flash("success", "The app is now unlocked");
 				res.redirect("/");
 			});

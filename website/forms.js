@@ -244,3 +244,42 @@ exports.form_settings_main_password = forms.create({
 }, {
 	validatePastFirstError: true
 });
+
+exports.form_add_item = forms.create({
+	title: fields.string({
+		required: true,
+		widget: widgets.text({
+			classes: ['uk-form-width-medium']
+		}),
+		validators: [
+			validators.rangelength(2, 60)
+		]
+	}),
+	url: fields.url({
+		widget: widgets.text({
+			classes: ['uk-form-width-large']
+		}),
+		validators: [
+			validators.url
+		]
+	}),
+	username: fields.string({
+		required: true,
+		widget: widgets.text({
+			classes: ['uk-form-width-medium']
+		}),
+	}),
+	password: fields.password({
+		required: true,
+		widget: widgets.password({
+			classes: ['uk-form-width-medium']
+		})
+	}),
+	comment: fields.string({
+		widget: widgets.textarea({
+			classes: ['uk-form-width-large']
+		})
+	})
+}, {
+	validatePastFirstError: true
+});

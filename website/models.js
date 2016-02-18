@@ -15,3 +15,13 @@ exports.User = new mongoose.Schema({
 	tmp_pk: String,
 	dateLastAction: Date,
 });
+
+exports.Item = new mongoose.Schema({
+	title: String,
+	url: String,
+	username: String,
+	password: String,
+	password_hidden: String,
+	comment: String,
+	user_id: String,
+});
