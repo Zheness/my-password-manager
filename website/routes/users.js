@@ -150,11 +150,6 @@ router.get('/sign-up-step-3', function(req, res, next) {
 	if (!req.session.user_id) {
 		req.flash("danger", "You must be logged in to access this page");
 		return res.redirect("/user/sign-in");
-	} else {
-		if (res.locals.user_infos.status != req.user_status.active.value) {
-			req.flash("warning", "You do not have the permission to access this page");
-			return res.redirect("/");
-		}
 	}
 	res.render('user/sign-up-step-3', {
 		title: 'Welcome!'

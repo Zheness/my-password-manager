@@ -92,17 +92,23 @@ app.use(function(req, res, next) {
 				res.locals.user_infos = user;
 				res.locals.userIsActive = (user.status == req.user_status.active.value ? true : false);
 				if (res.locals.userIsActive) {
-					var difference = Date.now() - user.dateLastAction.getTime();
-					var resultInMinutes = Math.round(difference / 60000);
-					if (resultInMinutes >= 60) { // TODO change in prod
-						req.isTimeOver = true;
-						if (req.path != "/unlock" && req.path != "/user/sign-out")
-							return res.redirect("/unlock");
-						next();
-					} else {
-						user.dateLastAction = Date.now();
+					if (req.path == "/user/sign-up-step-3" || req.path == "/unlock") {
+						user.dateLastAction = 0;
 						user.save(function(err) {});
 						next();
+					} else {
+						var difference = Date.now() - user.dateLastAction.getTime();
+						var resultInMinutes = Math.round(difference / 60000);
+						if (resultInMinutes >= 60) { // TODO change in prod
+							req.isTimeOver = true;
+							if (req.path != "/unlock" && req.path != "/user/sign-out" && req.path != "/user/sign-up-step-3")
+								return res.redirect("/unlock");
+							next();
+						} else {
+							user.dateLastAction = Date.now();
+							user.save(function(err) {});
+							next();
+						}
 					}
 				} else {
 					if (res.locals.user_infos.status == req.user_status.mustCreateMainPassword.value && req.path != "/user/sign-up-step-2" && req.path != "/user/sign-out") {
