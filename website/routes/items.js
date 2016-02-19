@@ -18,7 +18,15 @@ router.get('/', function(req, res, next) {
 	}
 
 	return res.render("item/index", {
-		title: "Home"
+		title: "Home",
+		extraCSS: [
+			"/uikit/css/components/notify.almost-flat.min.css"
+		],
+		extraJS: [
+			"/uikit/js/components/notify.min.js",
+			"/angular/angular.min.js",
+			"/javascripts/items.js",
+		]
 	});
 });
 

@@ -8,6 +8,11 @@
 	<title><%= typeof title != 'undefined' ? title : '' %> - My Password Manager</title>
 	<link rel='stylesheet' href='/uikit/css/uikit.almost-flat.min.css' />
 	<link rel='stylesheet' href='/font-awesome/css/font-awesome.min.css' />
+	<% if (typeof extraCSS != 'undefined') { %>
+		<% for (var i = 0; i < extraCSS.length; i++) { %>
+			<link rel='stylesheet' href='<%= extraCSS[i] %>' />
+		<% } %>
+	<% } %>
 </head>
 <body>
 	<div class="uk-container uk-container-center uk-margin-top uk-margin-large-bottom">
@@ -53,5 +58,10 @@
 	</div>
 	<script type='text/javascript' src="/jquery/jquery.min.js"></script>
 	<script type='text/javascript' src="/uikit/js/uikit.min.js"></script>
+	<% if (typeof extraJS != 'undefined') { %>
+		<% for (var i = 0; i < extraJS.length; i++) { %>
+			<script type='text/javascript' src="<%= extraJS[i] %>"></script>
+		<% } %>
+	<% } %>
 </body>
 </html>
