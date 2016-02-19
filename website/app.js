@@ -90,16 +90,25 @@ app.use(function(req, res, next) {
 			function(err, user) {
 				if (err) return console.error(err);
 				res.locals.user_infos = user;
-				var difference = Date.now() - user.dateLastAction.getTime();
-				var resultInMinutes = Math.round(difference / 60000);
-				if (resultInMinutes >= 60) { // TODO change in prod
-					req.isTimeOver = true;
-					if (req.path != "/unlock" && req.path != "/user/sign-out")
-						return res.redirect("/unlock");
-					next();
+				res.locals.userIsActive = (user.status == req.user_status.active.value ? true : false);
+				if (res.locals.userIsActive) {
+					var difference = Date.now() - user.dateLastAction.getTime();
+					var resultInMinutes = Math.round(difference / 60000);
+					if (resultInMinutes >= 60) { // TODO change in prod
+						req.isTimeOver = true;
+						if (req.path != "/unlock" && req.path != "/user/sign-out")
+							return res.redirect("/unlock");
+						next();
+					} else {
+						user.dateLastAction = Date.now();
+						user.save(function(err) {});
+						next();
+					}
 				} else {
-					user.dateLastAction = Date.now();
-					user.save(function(err) {});
+					if (res.locals.user_infos.status == req.user_status.mustCreateMainPassword.value && req.path != "/user/sign-up-step-2" && req.path != "/user/sign-out") {
+						req.flash("warning", "You must set your main password to use this app");
+						return res.redirect("/user/sign-up-step-2");
+					}
 					next();
 				}
 			});

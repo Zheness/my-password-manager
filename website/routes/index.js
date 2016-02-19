@@ -4,12 +4,7 @@ var CryptoJS = require("crypto-js");
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-	if (req.session.user_id) {
-		if (res.locals.user_infos.status == req.user_status.mustCreateMainPassword.value) {
-			req.flash("warning", "You must set your main password to use this app");
-			return res.redirect("/user/sign-up-step-2");
-		}
-	} else {
+	if (!req.session.user_id) {
 		return res.render('index', {
 			title: 'Home'
 		});
@@ -20,12 +15,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/unlock', function(req, res, next) {
-	if (req.session.user_id) {
-		if (res.locals.user_infos.status == req.user_status.mustCreateMainPassword.value) {
-			req.flash("warning", "You must set your main password to use this app");
-			return res.redirect("/user/sign-up-step-2");
-		}
-	} else {
+	if (!req.session.user_id) {
 		req.flash("danger", "You must be logged in to access this page");
 		return res.redirect("/user/sign-in");
 	}
@@ -35,12 +25,7 @@ router.get('/unlock', function(req, res, next) {
 });
 
 router.post('/unlock', function(req, res, next) {
-	if (req.session.user_id) {
-		if (res.locals.user_infos.status == req.user_status.mustCreateMainPassword.value) {
-			req.flash("warning", "You must set your main password to use this app");
-			return res.redirect("/user/sign-up-step-2");
-		}
-	} else {
+	if (!req.session.user_id) {
 		req.flash("danger", "You must be logged in to access this page");
 		return res.redirect("/user/sign-in");
 	}

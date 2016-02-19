@@ -12,8 +12,8 @@
 <body>
 	<div class="uk-container uk-container-center uk-margin-top uk-margin-large-bottom">
 		<nav class="uk-navbar uk-margin-large-bottom">
-			<a class="uk-navbar-brand" href="/">My Password Manager</a>
 			<% if (user_infos === null) { %>
+			<a class="uk-navbar-brand" href="/">My Password Manager</a>
 			<div class="uk-navbar-flip">
 				<ul class="uk-navbar-nav">
 					<li>
@@ -25,6 +25,12 @@
 				</ul>
 			</div>
 			<% } else { %>
+			<a class="uk-navbar-brand" href="/item">My Password Manager</a>
+			<% if (userIsActive) { %>
+			<ul class="uk-navbar-nav">
+				<li><a href="/item/add">Add item</a></li>
+			</ul>
+			<% } %>
 			<div class="uk-navbar-flip">
 				<ul class="uk-navbar-nav">
 					<li>

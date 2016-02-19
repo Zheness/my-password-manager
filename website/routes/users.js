@@ -37,6 +37,7 @@ router.post('/sign-up', function(req, res, next) {
 						email: form.data.email,
 						password: CryptoJS.SHA1(form.data.password).toString(),
 						status: req.user_status.mustCreateMainPassword.value,
+						dateLastAction: Date.now(),
 						main_password: ""
 					});
 					new_user.save(function(err) {

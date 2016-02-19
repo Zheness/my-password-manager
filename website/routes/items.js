@@ -11,6 +11,17 @@ function reloadPage(res, form, title, layout) {
 	});
 }
 
+router.get('/', function(req, res, next) {
+	if (!req.session.user_id) {
+		req.flash("warning", "You must be logged in to access this page");
+		return res.redirect("/user/sign-in");
+	}
+
+	return res.render("item/index", {
+		title: "Home"
+	});
+});
+
 router.get('/add', function(req, res, next) {
 	if (!req.session.user_id) {
 		req.flash("warning", "You must be logged in to access this page");
