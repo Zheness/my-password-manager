@@ -9,7 +9,6 @@ angular.module('mpmApp', [])
 			url: "/ajax/items"
 		}).then(
 			function successCallback(response) {
-				console.log(response.data);
 				if (response.data.error) {
 					UIkit.notify(response.data.message, "danger");
 				} else {
@@ -20,7 +19,35 @@ angular.module('mpmApp', [])
 			function errorCallback(response) {
 				ctrl.loader = false;
 				ctrl.error = true;
-				// UIkit.notify("An error occured, please try again", "danger");
 			}
 		);
+
+		this.togglePassword = function(item) {
+			if (item.pwd_displayed) {
+				item.password_hidden = item.old_pwd_hidden;
+				item.pwd_displayed = false;
+			} else {
+				$http({
+					method: "GET",
+					url: "/ajax/item",
+					params: {
+						item_id: item._id
+					}
+				}).then(
+					function successCallback(response) {
+						if (response.data.error) {
+							UIkit.notify(response.data.message, "danger");
+						} else {
+							item.pwd_displayed = true;
+							item.password = angular.copy(response.data.data);
+							item.old_pwd_hidden = item.password_hidden;
+							item.password_hidden = item.password;
+						}
+					},
+					function errorCallback(response) {
+						UIkit.notify("An error occured, please try again", "danger");
+					}
+				);
+			}
+		}
 	});
