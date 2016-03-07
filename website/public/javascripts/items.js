@@ -6,10 +6,16 @@ angular.module('mpmApp', [])
 		this.error = false;
 		$http({
 			method: "GET",
-			url: "/ajax"
+			url: "/ajax/items"
 		}).then(
 			function successCallback(response) {
-				ctrl.items = angular.copy(response.data);
+				console.log(response.data);
+				if (response.data.error) {
+					UIkit.notify(response.data.message, "danger");
+				} else {
+					ctrl.items = angular.copy(response.data.data);
+					ctrl.loader = false;
+				}
 			},
 			function errorCallback(response) {
 				ctrl.loader = false;

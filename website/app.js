@@ -17,6 +17,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var users_settings = require('./routes/users-settings');
 var items = require('./routes/items');
+var ajax = require('./routes/ajax');
 
 var app = express();
 
@@ -102,6 +103,12 @@ app.use(function(req, res, next) {
 						var resultInMinutes = Math.round(difference / 60000);
 						if (resultInMinutes >= 60) { // TODO change in prod
 							req.isTimeOver = true;
+							if (req.path.substring(0, 5) == "/ajax") {
+								return res.send({
+									"error": true,
+									"message": "Your app is locked due to inactivity"
+								});
+							}
 							if (req.path != "/unlock" && req.path != "/user/sign-out" && req.path != "/user/sign-up-step-3")
 								return res.redirect("/unlock");
 							next();
@@ -120,6 +127,12 @@ app.use(function(req, res, next) {
 				}
 			});
 	} else {
+		if (req.path.substring(0, 5) == "/ajax") {
+			return res.send({
+				"error": true,
+				"message": "You must be logged in to do this action"
+			});
+		}
 		next();
 	}
 });
@@ -128,6 +141,7 @@ app.use('/', routes);
 app.use('/item', items);
 app.use('/user', users);
 app.use('/user/settings', users_settings);
+app.use('/ajax', ajax);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

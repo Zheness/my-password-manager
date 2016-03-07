@@ -24,6 +24,7 @@ router.get('/', function(req, res, next) {
 		],
 		extraJS: [
 			"/uikit/js/components/notify.min.js",
+			"/uikit/js/components/grid.min.js",
 			"/angular/angular.min.js",
 			"/javascripts/items.js",
 		]
