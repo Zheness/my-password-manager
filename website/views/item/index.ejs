@@ -13,9 +13,9 @@
 			</ul>
 			<p>If everything is correct on your side, please try later. The issue may be temporary. If the issue persist, contact us.</p>
 		</div>
-		<div class="uk-grid-width-1-2" data-uk-grid="{gutter:20}" ng-show="list.items.length">
+		<div class="uk-grid-width-1-2" ng-show="list.items.length" id="containerItems">
 			<div ng-repeat="item in list.items">
-				<div class="uk-panel uk-panel-box uk-panel-box-secondary">
+				<div class="uk-panel uk-panel-box uk-panel-box-secondary" style="z-index: {{ item.infos_displayed ? 1 : 0 }}; box-shadow: {{ item.infos_displayed ? 'lightgray 2px 2px 10px' : 'none' }};">
 					<form class="uk-form uk-form-horizontal">
 						<fieldset>
 							<legend>{{ item.title }}</legend>
@@ -35,11 +35,18 @@
 								<label class="uk-form-label">Password</label>
 								<div class="uk-form-controls uk-form-controls-text">
 									{{ item.password_hidden }} <button class="uk-button uk-button-primary uk-button-small" ng-click="list.togglePassword(item)">{{ item.pwd_displayed ? "Hide" : "Show" }}</button>
+									<mpm-progress item="item"></mpm-progress>
+								</div>
+							</div>
+							<div class="uk-form-row" ng-show="item.infos_displayed">
+								<label class="uk-form-label">Comment</label>
+								<div class="uk-form-controls uk-form-controls-text">
+									{{ item.comment }}
 								</div>
 							</div>
 						</fieldset>
 					</form>
-					<p class="uk-text-right"><a href="">More</a></p>
+					<p class="uk-text-right"><a href="" ng-click="list.toggleInfos(item)">{{ item.infos_displayed ? "Less" : "More" }}</a></p>
 				</div>
 			</div>
 		</div>

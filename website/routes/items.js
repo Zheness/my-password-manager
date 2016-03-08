@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var CryptoJS = require("crypto-js");
 var forms = require("../forms");
+var strength = require('strength');
 
 function reloadPage(res, form, title, layout) {
 	return res.render(layout, {
@@ -20,11 +21,14 @@ router.get('/', function(req, res, next) {
 	return res.render("item/index", {
 		title: "Home",
 		extraCSS: [
-			"/uikit/css/components/notify.almost-flat.min.css"
+			"/uikit/css/components/notify.almost-flat.min.css",
+			"/uikit/css/components/progress.almost-flat.min.css",
+			"/uikit/css/components/tooltip.almost-flat.min.css",
 		],
 		extraJS: [
 			"/uikit/js/components/notify.min.js",
 			"/uikit/js/components/grid.min.js",
+			"/uikit/js/components/tooltip.min.js",
 			"/angular/angular.min.js",
 			"/javascripts/items.js",
 		]
@@ -69,6 +73,7 @@ router.post('/add', function(req, res, next) {
 					username: form.data.username,
 					password: CryptoJS.AES.encrypt(form.data.password, pv_key),
 					password_hidden: pwd_hidden,
+					password_strength: strength(form.data.password) * 100,
 					comment: form.data.comment,
 					user_id: req.session.user_id,
 				});

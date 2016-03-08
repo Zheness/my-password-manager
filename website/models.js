@@ -22,6 +22,7 @@ exports.Item = new mongoose.Schema({
 	username: String,
 	password: String,
 	password_hidden: String,
+	password_strength: Number,
 	comment: String,
 	user_id: String,
 });

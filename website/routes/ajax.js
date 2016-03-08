@@ -24,7 +24,7 @@ router.get('/items', function(req, res, next) {
 		});
 });
 
-router.get('/item', function(req, res, next) {
+router.get('/password', function(req, res, next) {
 	res.set("Content-type", "application/json");
 	req.models.Item.findOne({
 			_id: req.query.item_id,
@@ -59,6 +59,28 @@ router.get('/item', function(req, res, next) {
 					}));
 				}
 			});
+		});
+});
+
+router.get('/item', function(req, res, next) {
+	res.set("Content-type", "application/json");
+	req.models.Item.findOne({
+			_id: req.query.item_id,
+			user_id: req.session.user_id
+		},
+		"_id title url username password_hidden comment password_strength",
+		function(err, item) {
+			if (err) {
+				return res.send(JSON.stringify({
+					"error": true,
+					"message": "The item is not available"
+				}));
+			}
+			return res.send(JSON.stringify({
+				"error": false,
+				"message": "",
+				"data": item
+			}));
 		});
 });
 
