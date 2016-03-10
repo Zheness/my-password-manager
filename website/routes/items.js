@@ -21,6 +21,7 @@ router.get('/', function(req, res, next) {
 	return res.render("item/index", {
 		title: "Home",
 		extraCSS: [
+			"/stylesheets/style.css",
 			"/uikit/css/components/notify.almost-flat.min.css",
 			"/uikit/css/components/progress.almost-flat.min.css",
 			"/uikit/css/components/tooltip.almost-flat.min.css",

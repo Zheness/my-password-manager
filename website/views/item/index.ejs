@@ -15,7 +15,7 @@
 		</div>
 		<div class="uk-grid-width-1-2" ng-show="list.items.length" id="containerItems">
 			<div ng-repeat="item in list.items">
-				<div class="uk-panel uk-panel-box uk-panel-box-secondary" style="z-index: {{ item.infos_displayed ? 1 : 0 }}; box-shadow: {{ item.infos_displayed ? 'lightgray 2px 2px 10px' : 'none' }};">
+				<div class="uk-panel uk-panel-box uk-panel-box-secondary {{ item.infos_displayed ? 'box_highlighted' : '' }}">
 					<form class="uk-form uk-form-horizontal">
 						<fieldset>
 							<legend>{{ item.title }}</legend>

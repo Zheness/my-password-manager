@@ -1,8 +1,4 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
-
-a {
-  color: #00B7FF;
+.box_highlighted {
+	z-index: 1;
+	box-shadow: lightgray 2px 2px 10px;
 }
