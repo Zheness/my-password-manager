@@ -5,9 +5,9 @@ angular.module('mpmApp', [])
 		this.loader = true;
 		this.error = false;
 
-		UIkit.grid("#containerItems", {
-			gutter: 20
-		});
+		// UIkit.grid("#containerItems", {
+		// 	gutter: 20
+		// });
 		$http({
 			method: "GET",
 			url: "/ajax/items"
@@ -19,9 +19,9 @@ angular.module('mpmApp', [])
 					ctrl.items = angular.copy(response.data.data);
 					ctrl.loader = false;
 
-					UIkit.grid("#containerItems", {
-						gutter: 20
-					});
+					// UIkit.grid("#containerItems", {
+					// 	gutter: 20
+					// });
 				}
 			},
 			function errorCallback(response) {
@@ -81,9 +81,9 @@ angular.module('mpmApp', [])
 				$scope.toggleInfos = function(item) {
 					if (item.infos_displayed) {
 						item.infos_displayed = false;
-						UIkit.grid("#containerItems", {
-							gutter: 20
-						});
+						// UIkit.grid("#containerItems", {
+						// 	gutter: 20
+						// });
 					} else {
 						$http({
 							method: "GET",
@@ -118,9 +118,9 @@ angular.module('mpmApp', [])
 									else
 										item.pwd_strength_title = "Very weak";
 									item.pwd_strength_size = item.pwd_strength_size + "%";
-									UIkit.grid("#containerItems", {
-										gutter: 20
-									});
+									// UIkit.grid("#containerItems", {
+									// 	gutter: 20
+									// });
 									//console.log(item);
 								}
 							},
