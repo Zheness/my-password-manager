@@ -68,6 +68,11 @@ router.post('/add', function(req, res, next) {
 				var pv_key = CryptoJS.AES.decrypt(req.session.password, user.tmp_pk).toString(CryptoJS.enc.Utf8);
 				var is_unlocked = CryptoJS.AES.decrypt(user.unlocked_token, pv_key).toString(CryptoJS.enc.Utf8);
 
+				if (is_unlocked != "unlocked") {
+					req.flash("danger", "Your current main password is incorrect");
+					return reloadPage(res, form, "Add an item", "item/add");
+				}
+
 				var new_item = req.models.Item({
 					title: form.data.title,
 					url: form.data.url,

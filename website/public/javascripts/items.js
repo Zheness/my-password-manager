@@ -4,10 +4,6 @@ angular.module('mpmApp', [])
 		this.items = [];
 		this.loader = true;
 		this.error = false;
-
-		// UIkit.grid("#containerItems", {
-		// 	gutter: 20
-		// });
 		$http({
 			method: "GET",
 			url: "/ajax/items"
@@ -18,10 +14,6 @@ angular.module('mpmApp', [])
 				} else {
 					ctrl.items = angular.copy(response.data.data);
 					ctrl.loader = false;
-
-					// UIkit.grid("#containerItems", {
-					// 	gutter: 20
-					// });
 				}
 			},
 			function errorCallback(response) {
@@ -81,9 +73,6 @@ angular.module('mpmApp', [])
 				$scope.toggleInfos = function(item) {
 					if (item.infos_displayed) {
 						item.infos_displayed = false;
-						// UIkit.grid("#containerItems", {
-						// 	gutter: 20
-						// });
 					} else {
 						$http({
 							method: "GET",
@@ -98,30 +87,12 @@ angular.module('mpmApp', [])
 								} else {
 									item.infos_displayed = true;
 									var tmp_item = angular.copy(response.data.data);
+
 									item.pwd_strength_size = tmp_item.password_strength / 5;
 									item.comment = tmp_item.comment;
-									if (item.pwd_strength_size >= 65)
-										item.pwd_strength_color = "uk-progress-success";
-									else if (item.pwd_strength_size >= 35)
-										item.pwd_strength_color = "uk-progress-warning";
-									else
-										item.pwd_strength_color = "uk-progress-danger";
-
-									if (item.pwd_strength_size >= 85)
-										item.pwd_strength_title = "Very strong";
-									else if (item.pwd_strength_size >= 70)
-										item.pwd_strength_title = "Strong";
-									else if (item.pwd_strength_size >= 50)
-										item.pwd_strength_title = "Good";
-									else if (item.pwd_strength_size >= 30)
-										item.pwd_strength_title = "Weak";
-									else
-										item.pwd_strength_title = "Very weak";
+									item.pwd_strength_color = get_pwd_strength_color(item.pwd_strength_size);
+									item.pwd_strength_title = get_pwd_strength_title(item.pwd_strength_size);
 									item.pwd_strength_size = item.pwd_strength_size + "%";
-									// UIkit.grid("#containerItems", {
-									// 	gutter: 20
-									// });
-									//console.log(item);
 								}
 							},
 							function errorCallback(response) {
@@ -130,7 +101,111 @@ angular.module('mpmApp', [])
 						);
 					}
 				}
+
+				$scope.toggleEdit = function(item) {
+					$http({
+						method: "GET",
+						url: "/ajax/password",
+						params: {
+							item_id: item._id
+						}
+					}).then(
+						function successCallback(response) {
+							if (response.data.error) {
+								UIkit.notify(response.data.message, "danger");
+							} else {
+								item.toEdit = !item.toEdit;
+								item.title_toedit = item.title;
+								item.comment_toedit = item.comment;
+								item.url_toedit = item.url;
+								item.username_toedit = item.username;
+								item.password = angular.copy(response.data.data);
+							}
+						},
+						function errorCallback(response) {
+							UIkit.notify("An error occured, please try again", "danger");
+						}
+					);
+				}
 			},
 			templateUrl: '/item-infos.html'
 		};
+	})
+	.directive('mpmItemedit', function() {
+		return {
+			restrict: 'E',
+			scope: {
+				item: '=item',
+			},
+			transclude: true,
+			controller: function($scope, $http) {
+				$scope.edit = function(item) {
+					$http({
+						method: "POST",
+						url: "/ajax/item",
+						data: {
+							item_id: item._id,
+							item_title: item.title_toedit,
+							item_comment: item.comment_toedit,
+							item_url: item.url_toedit,
+							item_username: item.username_toedit,
+							item_password: item.password
+						}
+					}).then(
+						function successCallback(response) {
+							if (response.data.error) {
+								UIkit.notify(response.data.message, "danger");
+							} else {
+								var item_tmp = angular.copy(response.data.data);
+								item.title = item_tmp.title;
+								item.comment = item_tmp.comment;
+								item.url = item_tmp.url;
+								item.username = item_tmp.username;
+								item.password_hidden = item_tmp.password_hidden;
+								item.pwd_displayed = false;
+
+
+								item.pwd_strength_size = item_tmp.password_strength / 5;
+								item.pwd_strength_color = get_pwd_strength_color(item.pwd_strength_size);
+								item.pwd_strength_title = get_pwd_strength_title(item.pwd_strength_size);
+								item.pwd_strength_size = item.pwd_strength_size + "%";
+
+								item.toEdit = !item.toEdit;
+								UIkit.notify("Item saved", "success");
+							}
+						},
+						function errorCallback(response) {
+							UIkit.notify("An error occured, please try again", "danger");
+						}
+					);
+
+				}
+				$scope.toggleEdit = function(item) {
+					item.toEdit = !item.toEdit;
+				}
+			},
+			templateUrl: '/item-edit.html'
+		};
 	});
+
+function get_pwd_strength_color(strength) {
+	if (strength >= 65)
+		return "uk-progress-success";
+	else if (strength >= 35)
+		return "uk-progress-warning";
+	else
+		return "uk-progress-danger";
+}
+
+function get_pwd_strength_title(strength) {
+	if (strength >= 85)
+		return "Very strong";
+	else if (strength >= 70)
+		return "Strong";
+	else if (strength >= 50)
+		return "Good";
+	else if (strength >= 30)
+		return "Weak";
+	else
+		return "Very weak";
+}

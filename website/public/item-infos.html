@@ -1,4 +1,4 @@
-<div class="uk-scrollable-box uk-panel uk-panel-box uk-panel-box-secondary {{ item.infos_displayed ? 'box_highlighted' : '' }}">
+<div class="uk-panel uk-panel-box uk-panel-box-secondary {{ item.infos_displayed ? 'box_highlighted' : '' }}">
 	<form class="uk-form uk-form-horizontal">
 		<fieldset>
 			<legend>{{ item.title }}</legend>
@@ -29,5 +29,6 @@
 			</div>
 		</fieldset>
 	</form>
-	<p class="uk-text-right"><a href="" ng-click="toggleInfos(item)">{{ item.infos_displayed ? "Less" : "More" }}</a></p>
+	<p class="uk-float-right"><a href="" ng-click="toggleInfos(item)">{{ item.infos_displayed ? "Less" : "More" }}</a></p>
+	<p class="uk-float-left" ng-show="item.infos_displayed"><button class="uk-button uk-button-small" type="button" ng-click="toggleEdit(item)">Edit</button> <button class="uk-button uk-button-danger uk-button-small" type="button">Delete</button></p>
 </div>

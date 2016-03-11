@@ -15,7 +15,8 @@
 		</div>
 		<div class="uk-grid uk-grid-small" ng-show="list.items.length" id="containerItems">
 			<div ng-repeat="item in list.items" class="uk-width-1-2 uk-margin-bottom">
-				<mpm-iteminfo item="item"></mpm-iteminfo>
+				<mpm-iteminfo item="item" ng-hide="item.toEdit"></mpm-iteminfo>
+				<mpm-itemedit item="item" ng-show="item.toEdit"></mpm-itemedit>
 			</div>
 		</div>
 		<div ng-show="list.items.length == 0">
