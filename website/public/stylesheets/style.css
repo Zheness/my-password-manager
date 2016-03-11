@@ -7,3 +7,12 @@
 	height: 220px;
 	resize: none;
 }
+
+.angular-with-newlines {
+	white-space: pre-line;
+	margin: -20px;
+}
+
+.break_long_pwd {
+	word-break: break-all;
+}
