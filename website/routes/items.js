@@ -24,12 +24,10 @@ router.get('/', function(req, res, next) {
 			"/stylesheets/style.css",
 			"/uikit/css/components/notify.almost-flat.min.css",
 			"/uikit/css/components/progress.almost-flat.min.css",
-			"/uikit/css/components/tooltip.almost-flat.min.css",
 		],
 		extraJS: [
 			"/uikit/js/components/notify.min.js",
 			"/uikit/js/components/grid.min.js",
-			"/uikit/js/components/tooltip.min.js",
 			"/angular/angular.min.js",
 			"/javascripts/items.js",
 		]
