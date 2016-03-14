@@ -37,7 +37,8 @@ angular.module('mpmApp', [])
 		return {
 			restrict: 'E',
 			scope: {
-				item: '=item',
+				item: '=',
+				items: '=',
 			},
 			transclude: true,
 			controller: function($scope, $http) {
@@ -120,6 +121,33 @@ angular.module('mpmApp', [])
 								item.url_toedit = item.url;
 								item.username_toedit = item.username;
 								item.password = angular.copy(response.data.data);
+							}
+						},
+						function errorCallback(response) {
+							UIkit.notify("An error occured, please try again", "danger");
+						}
+					);
+				}
+				$scope.deleteItem = function(item) {
+					$http({
+						method: "GET",
+						url: "/ajax/delete",
+						params: {
+							item_id: item._id
+						}
+					}).then(
+						function successCallback(response) {
+							if (response.data.error) {
+								UIkit.notify(response.data.message, "danger");
+							} else {
+								var items = [];
+								for (var i = 0; i < $scope.items.length; i++) {
+									if ($scope.items[i]._id != item._id) {
+										items.push($scope.items[i]);
+									}
+								};
+								$scope.items = items;
+								UIkit.notify("Item successfully deleted", "success");
 							}
 						},
 						function errorCallback(response) {

@@ -150,4 +150,23 @@ router.post('/item', function(req, res, next) {
 	});
 });
 
+router.get('/delete', function(req, res, next) {
+	res.set("Content-type", "application/json");
+	req.models.Item.findOne({
+		_id: req.query.item_id,
+		user_id: req.session.user_id
+	}).remove(function(err) {
+		if (err) {
+			return res.send(JSON.stringify({
+				"error": true,
+				"message": "The item is not available"
+			}));
+		}
+		return res.send(JSON.stringify({
+			"error": false,
+			"message": ""
+		}));
+	});
+});
+
 module.exports = router;

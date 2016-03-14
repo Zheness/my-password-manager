@@ -30,5 +30,18 @@
 		</fieldset>
 	</form>
 	<p class="uk-float-right"><a href="" ng-click="toggleInfos(item)">{{ item.infos_displayed ? "Less" : "More" }}</a></p>
-	<p class="uk-float-left" ng-show="item.infos_displayed"><button class="uk-button uk-button-small" type="button" ng-click="toggleEdit(item)">Edit</button> <button class="uk-button uk-button-danger uk-button-small" type="button">Delete</button></p>
+	<p class="uk-float-left" ng-show="item.infos_displayed"><button class="uk-button uk-button-small" type="button" ng-click="toggleEdit(item)">Edit</button> <button class="uk-button uk-button-danger uk-button-small" type="button" data-uk-modal="{target:'#modalDelete_{{ item._id }}'}">Delete</button></p>
+</div>
+<div id="modalDelete_{{ item._id }}" class="uk-modal">
+	<div class="uk-modal-dialog">
+		<a class="uk-modal-close uk-close"></a>
+		<div class="uk-modal-header">
+			<h3>Delete item {{ item.title }}</h3>
+		</div>
+		<p>Are you sure to delete the item <b>{{ item.title }}</b> ?</p>
+		<p>All information will be lost.</p>
+		<div class="uk-modal-footer">
+			<button class="uk-button uk-button-danger" type="button" ng-click="deleteItem(item)">Delete</button> <button class="uk-button uk-modal-close" type="button">Cancel</button>
+		</div>
+	</div>
 </div>
