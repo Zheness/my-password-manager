@@ -76,7 +76,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uikit', express.static(__dirname + '/bower_components/uikit/'));
 app.use('/jquery', express.static(__dirname + '/bower_components/jquery/dist/'));
 app.use('/angular', express.static(__dirname + '/bower_components/angular/'));
-app.use('/font-awesome', express.static(__dirname + '/node_modules/font-awesome/'));
+app.use('/clipboard', express.static(__dirname + '/bower_components/clipboard/dist/'));
 
 /*
  * User infos if connected

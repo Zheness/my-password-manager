@@ -237,3 +237,33 @@ function get_pwd_strength_title(strength) {
 	else
 		return "Very weak";
 }
+$(function() {
+	var clipboard = new Clipboard(".btnCopy", {
+		text: function(trigger) {
+			var tmp = "null";
+			$.ajax({
+				method: "GET",
+				url: "/ajax/password",
+				dataType: "json",
+				data: {
+					item_id: trigger.getAttribute('data-item-id')
+				},
+				async: false
+			}).done(
+				function(response) {
+					if (response.error) {
+						UIkit.notify(response.message, "danger");
+					} else {
+						tmp = response.data;
+					}
+				}
+			).fail(
+				function(response) {
+					console.log("fail");
+					UIkit.notify("An error occured, please try again", "danger");
+				}
+			);
+			return tmp;
+		}
+	});
+});

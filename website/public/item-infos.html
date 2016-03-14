@@ -18,6 +18,7 @@
 				<label class="uk-form-label">Password</label>
 				<div class="uk-form-controls uk-form-controls-text break_long_pwd">
 					{{ item.password_hidden }} <button class="uk-button uk-button-primary uk-button-small" ng-click="togglePassword(item)">{{ item.pwd_displayed ? "Hide" : "Show" }}</button>
+					<button class="uk-button uk-button-small btnCopy" id="btnCopy_{{ item._id }}" data-item-id="{{ item._id }}" type="button" data-clipboard-text="null"><span class="uk-icon-clipboard"></span></button>
 					<mpm-progress item="item"></mpm-progress>
 				</div>
 			</div>
