@@ -130,8 +130,8 @@ angular.module('mpmApp', [])
 				}
 				$scope.deleteItem = function(item) {
 					$http({
-						method: "GET",
-						url: "/ajax/delete",
+						method: "DELETE",
+						url: "/ajax/item",
 						params: {
 							item_id: item._id
 						}

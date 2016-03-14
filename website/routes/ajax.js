@@ -150,7 +150,7 @@ router.post('/item', function(req, res, next) {
 	});
 });
 
-router.get('/delete', function(req, res, next) {
+router.delete('/item', function(req, res, next) {
 	res.set("Content-type", "application/json");
 	req.models.Item.findOne({
 		_id: req.query.item_id,
