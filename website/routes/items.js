@@ -8,7 +8,10 @@ function reloadPage(res, form, title, layout) {
 	return res.render(layout, {
 		title: title,
 		myForm: form,
-		uikitFieldHorizontal: forms.uikitFieldHorizontal
+		uikitFieldHorizontal: forms.uikitFieldHorizontal,
+		extraJS: [
+			"/javascripts/add-item.js",
+		]
 	});
 }
 
