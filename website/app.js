@@ -77,6 +77,7 @@ app.use('/uikit', express.static(__dirname + '/bower_components/uikit/'));
 app.use('/jquery', express.static(__dirname + '/bower_components/jquery/dist/'));
 app.use('/angular', express.static(__dirname + '/bower_components/angular/'));
 app.use('/clipboard', express.static(__dirname + '/bower_components/clipboard/dist/'));
+app.use('/password-generator.min.js', express.static(__dirname + '/node_modules/jquery-password-generator-plugin/dist/jquery.jquery-password-generator-plugin.min.js'));
 
 /*
  * User infos if connected

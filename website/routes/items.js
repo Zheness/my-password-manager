@@ -10,6 +10,7 @@ function reloadPage(res, form, title, layout) {
 		myForm: form,
 		uikitFieldHorizontal: forms.uikitFieldHorizontal,
 		extraJS: [
+			"/password-generator.min.js",
 			"/javascripts/add-item.js",
 		]
 	});
