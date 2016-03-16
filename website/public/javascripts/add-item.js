@@ -59,7 +59,43 @@ function generatePassword() {
 	$("#pwdGen_length_display").text(pwdGen_length.val());
 	if (!(pwdGen_numbers.is(':checked') || pwdGen_lowercase.is(':checked') || pwdGen_uppercase.is(':checked') || pwdGen_specials.is(':checked'))) {
 		$("#pwdGen_pwd").val("Please choose one or more options above");
+		setProgressBar(0);
 	} else {
 		$("#pwdGen_pwd").val($.passGen(optionsPwd));
+		setProgressBar(100 * testStrength($("#pwdGen_pwd").val()));
 	}
+}
+
+function setProgressBar(score) {
+	score = score / 5;
+	var passwordStrength = $("#passwordStrength");
+	var passwordStrengthBar = $("#passwordStrengthBar");
+	passwordStrength.removeClass(passwordStrength.attr("data-current-class"));
+	var current_color = get_pwd_strength_color(score);
+	passwordStrength.addClass(current_color);
+	passwordStrength.attr("data-current-class", current_color);
+	passwordStrength.attr("title", get_pwd_strength_title(score));
+	passwordStrengthBar.width(score + "%");
+}
+
+function get_pwd_strength_color(strength) {
+	if (strength >= 65)
+		return "uk-progress-success";
+	else if (strength >= 35)
+		return "uk-progress-warning";
+	else
+		return "uk-progress-danger";
+}
+
+function get_pwd_strength_title(strength) {
+	if (strength >= 85)
+		return "Very strong";
+	else if (strength >= 70)
+		return "Strong";
+	else if (strength >= 50)
+		return "Good";
+	else if (strength >= 30)
+		return "Weak";
+	else
+		return "Very weak";
 }

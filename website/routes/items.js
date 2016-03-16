@@ -9,8 +9,12 @@ function reloadPage(res, form, title, layout) {
 		title: title,
 		myForm: form,
 		uikitFieldHorizontal: forms.uikitFieldHorizontal,
+		extraCSS: [
+			"/uikit/css/components/progress.almost-flat.min.css",
+		],
 		extraJS: [
 			"/password-generator.min.js",
+			"/javascripts/password-strength.js",
 			"/javascripts/add-item.js",
 		]
 	});
