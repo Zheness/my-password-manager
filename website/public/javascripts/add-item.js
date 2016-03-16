@@ -1,4 +1,5 @@
 $(function() {
+	var modal = UIkit.modal("#modalGeneratePwd");
 	var field = $(".pwdShowHideGenerate");
 	field.parent().append('&nbsp;<button id="showPwd" class="uk-button uk-button-primary" data-uk-tooltip title="Show" type="button"><span class="uk-icon-eye"></span></button>');
 	field.parent().append('&nbsp;<button id="hidePwd" class="uk-button uk-button-primary" data-uk-tooltip title="Hide" type="button"><span class="uk-icon-eye-slash"></span></button>');
@@ -20,7 +21,6 @@ $(function() {
 		hidePwd.hide();
 	});
 	$(document).on("click", "#generatePwd", function() {
-		var modal = UIkit.modal("#modalGeneratePwd");
 		modal.show();
 	});
 	$(document).on("change", "#formPwgGen", function(e) {
@@ -33,6 +33,13 @@ $(function() {
 	});
 	$(document).on("submit", "#formPwgGen", function() {
 		return false;
+	});
+	$(document).on("click", "#btnNewPwd", function() {
+		generatePassword();
+	});
+	$(document).on("click", "#btnUsePwd", function() {
+		field.val($("#pwdGen_pwd").val());
+		modal.hide();
 	});
 });
 
