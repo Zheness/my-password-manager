@@ -28,7 +28,8 @@ connection.on('error', console.error.bind(console, 'connection error:'));
 app.use(function(req, res, next) {
 	req.models = {
 		User: connection.model('User', models.User, 'users'),
-		Item: connection.model('Item', models.Item, 'items')
+		Item: connection.model('Item', models.Item, 'items'),
+		Category: connection.model('Category', models.Category, 'categories')
 	};
 	next();
 });

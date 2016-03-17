@@ -169,4 +169,28 @@ router.delete('/item', function(req, res, next) {
 	});
 });
 
+router.post('/category', function(req, res, next) {
+	res.set("Content-type", "application/json");
+	req.models.Category.count(
+		function(err, count) {
+			if (err) return console.error(err);
+			var new_category = req.models.Category({
+				title: req.body.category,
+				position: count
+			});
+
+			new_category.save(function(err) {
+				if (err) return console.error(err);
+				return res.send(JSON.stringify({
+					"error": false,
+					"message": "",
+					"data": {
+						id: new_category._id,
+						title: new_category.title
+					}
+				}));
+			});
+		});
+});
+
 module.exports = router;

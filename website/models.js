@@ -25,4 +25,10 @@ exports.Item = new mongoose.Schema({
 	password_strength: Number,
 	comment: String,
 	user_id: String,
+	category_id: String,
+});
+
+exports.Category = new mongoose.Schema({
+	title: String,
+	position: String,
 });

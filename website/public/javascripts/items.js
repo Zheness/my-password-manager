@@ -2,26 +2,73 @@ angular.module('mpmApp', [])
 	.controller('ListController', function($scope, $http) {
 		var ctrl = this;
 		this.items = [];
+		this.categories = [{
+			id: "all",
+			title: "All"
+		}];
 		this.loader = true;
 		this.error = false;
-		$http({
-			method: "GET",
-			url: "/ajax/items"
-		}).then(
-			function successCallback(response) {
-				if (response.data.error) {
-					UIkit.notify(response.data.message, "danger");
-				} else {
-					ctrl.items = angular.copy(response.data.data);
-					ctrl.loader = false;
-				}
-			},
-			function errorCallback(response) {
-				ctrl.loader = false;
-				ctrl.error = true;
-			}
-		);
+		this.bAddCategory = false;
+		this.category = "all";
+		this.new_category = "";
 
+		function loadItems() {
+			$http({
+				method: "GET",
+				url: "/ajax/items",
+				params: {
+					category: ctrl.category
+				}
+			}).then(
+				function successCallback(response) {
+					if (response.data.error) {
+						UIkit.notify(response.data.message, "danger");
+					} else {
+						ctrl.items = angular.copy(response.data.data);
+						ctrl.loader = false;
+					}
+				},
+				function errorCallback(response) {
+					ctrl.loader = false;
+					ctrl.error = true;
+				}
+			);
+		}
+
+		loadItems();
+
+		this.displayAddCategory = function() {
+			ctrl.bAddCategory = true;
+		}
+
+		this.addCategory = function() {
+			$http({
+				method: "POST",
+				url: "/ajax/category",
+				data: {
+					category: ctrl.new_category
+				}
+			}).then(
+				function successCallback(response) {
+					if (response.data.error) {
+						UIkit.notify(response.data.message, "danger");
+					} else {
+						ctrl.categories.push(angular.copy(response.data.data));
+						ctrl.new_category = "";
+						ctrl.bAddCategory = false;
+					}
+				},
+				function errorCallback(response) {
+					ctrl.loader = false;
+					ctrl.error = true;
+				}
+			);
+		}
+
+		this.cancelAddCategory = function() {
+			ctrl.bAddCategory = false;
+			ctrl.new_category = "";
+		}
 
 	})
 	.directive('mpmProgress', function() {
