@@ -35,6 +35,29 @@ angular.module('mpmApp', [])
 			);
 		}
 
+		function loadCategories() {
+			$http({
+				method: "GET",
+				url: "/ajax/categories",
+			}).then(
+				function successCallback(response) {
+					if (response.data.error) {
+						UIkit.notify(response.data.message, "danger");
+					} else {
+						ctrl.categories = angular.copy(response.data.data);
+						ctrl.categories.unshift({
+							id: "all",
+							title: "All"
+						});
+					}
+				},
+				function errorCallback(response) {
+					UIkit.notify("An error occured, please try again", "danger");
+				}
+			);
+		}
+
+		loadCategories();
 		loadItems();
 
 		this.displayAddCategory = function() {
@@ -42,6 +65,9 @@ angular.module('mpmApp', [])
 		}
 
 		this.addCategory = function() {
+			if (ctrl.new_category == "") {
+				return false;
+			}
 			$http({
 				method: "POST",
 				url: "/ajax/category",
@@ -59,8 +85,7 @@ angular.module('mpmApp', [])
 					}
 				},
 				function errorCallback(response) {
-					ctrl.loader = false;
-					ctrl.error = true;
+					UIkit.notify("An error occured, please try again", "danger");
 				}
 			);
 		}

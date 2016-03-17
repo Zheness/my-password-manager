@@ -193,4 +193,26 @@ router.post('/category', function(req, res, next) {
 		});
 });
 
+router.get('/categories', function(req, res, next) {
+	res.set("Content-type", "application/json");
+	req.models.Category.find({}, null, {
+			sort: {
+				position: 1
+			}
+		},
+		function(err, categories) {
+			if (err) {
+				return res.send(JSON.stringify({
+					"error": true,
+					"message": "No categories available"
+				}));
+			}
+			return res.send(JSON.stringify({
+				"error": false,
+				"message": "",
+				"data": categories
+			}));
+		});
+});
+
 module.exports = router;
