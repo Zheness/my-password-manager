@@ -6,9 +6,18 @@ var strength = require('strength');
 
 router.get('/items', function(req, res, next) {
 	res.set("Content-type", "application/json");
-	req.models.Item.find({
+	var options = {};
+	var category = req.query.category + "";
+	if (category == "" || category == "all")
+		options = {
 			user_id: req.session.user_id
-		},
+		};
+	else
+		options = {
+			category: category,
+			user_id: req.session.user_id
+		};
+	req.models.Item.find(options,
 		"_id title url username password_hidden",
 		function(err, items) {
 			if (err) {
@@ -185,7 +194,7 @@ router.post('/category', function(req, res, next) {
 					"error": false,
 					"message": "",
 					"data": {
-						id: new_category._id,
+						_id: new_category._id,
 						title: new_category.title
 					}
 				}));

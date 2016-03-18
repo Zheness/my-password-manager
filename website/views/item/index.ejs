@@ -3,7 +3,7 @@
 		<div class="uk-grid">
 			<div class="uk-width-medium-2-10">
 				<ul class="uk-tab uk-tab-left">
-					<li ng-repeat="cat in list.categories" class="{{ list.category == cat.id ? 'uk-active' : '' }}"><a href="" data-category="{{ cat.id }}">{{ cat.title }}</a></li>
+					<li ng-repeat="cat in list.categories" class="{{ list.category == cat._id ? 'uk-active' : '' }}"><a href="" data-category="{{ cat._id }}" ng-click="list.changeCategory(cat._id)">{{ cat.title }}</a></li>
 					<li class="uk-text-center" ng-hide="list.bAddCategory"><a href="" ng-click="list.displayAddCategory()"><span class="uk-icon-plus"></span> Add category</a></li>
 					<li ng-show="list.bAddCategory" class="uk-text-center uk-form tabInputCatgeory">
 						<input type="text" class="uk-width-1-1" ng-model="list.new_category">
@@ -34,7 +34,7 @@
 						<mpm-itemedit item="item" ng-show="item.toEdit"></mpm-itemedit>
 					</div>
 				</div>
-				<div ng-show="list.items.length == 0">
+				<div ng-show="list.items.length == 0 && list.loader == false">
 					<p>There is no item to display.</p>
 				</div>
 			</div>

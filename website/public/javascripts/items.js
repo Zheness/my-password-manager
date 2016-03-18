@@ -1,11 +1,11 @@
 angular.module('mpmApp', [])
 	.controller('ListController', function($scope, $http) {
 		var ctrl = this;
-		this.items = [];
 		this.categories = [{
-			id: "all",
+			_id: "all",
 			title: "All"
 		}];
+		this.items = [];
 		this.loader = true;
 		this.error = false;
 		this.bAddCategory = false;
@@ -13,6 +13,8 @@ angular.module('mpmApp', [])
 		this.new_category = "";
 
 		function loadItems() {
+			ctrl.items = [];
+			ctrl.loader = true;
 			$http({
 				method: "GET",
 				url: "/ajax/items",
@@ -46,7 +48,7 @@ angular.module('mpmApp', [])
 					} else {
 						ctrl.categories = angular.copy(response.data.data);
 						ctrl.categories.unshift({
-							id: "all",
+							_id: "all",
 							title: "All"
 						});
 					}
@@ -59,6 +61,11 @@ angular.module('mpmApp', [])
 
 		loadCategories();
 		loadItems();
+
+		this.changeCategory = function(cat_id) {
+			ctrl.category = cat_id;
+			loadItems();
+		}
 
 		this.displayAddCategory = function() {
 			ctrl.bAddCategory = true;
