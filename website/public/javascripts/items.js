@@ -27,6 +27,11 @@ angular.module('mpmApp', [])
 						UIkit.notify(response.data.message, "danger");
 					} else {
 						ctrl.items = angular.copy(response.data.data);
+						for (var i = 0; i < ctrl.items.length; i++) {
+							if (typeof ctrl.items[i].category_id == "undefined") {
+								ctrl.items[i].category_id = "all";
+							}
+						};
 						ctrl.loader = false;
 					}
 				},
@@ -199,6 +204,7 @@ angular.module('mpmApp', [])
 								item.comment_toedit = item.comment;
 								item.url_toedit = item.url;
 								item.username_toedit = item.username;
+								item.category_toedit = item.category_id;
 								item.password = angular.copy(response.data.data);
 							}
 						},
@@ -243,6 +249,9 @@ angular.module('mpmApp', [])
 			restrict: 'E',
 			scope: {
 				item: '=item',
+				items: '=',
+				category: '=category',
+				categories: '=categories',
 			},
 			transclude: true,
 			controller: function($scope, $http) {
@@ -256,6 +265,7 @@ angular.module('mpmApp', [])
 							item_comment: item.comment_toedit,
 							item_url: item.url_toedit,
 							item_username: item.username_toedit,
+							item_category: item.category_toedit,
 							item_password: item.password
 						}
 					}).then(
@@ -263,11 +273,13 @@ angular.module('mpmApp', [])
 							if (response.data.error) {
 								UIkit.notify(response.data.message, "danger");
 							} else {
+								var old_cat = item.category_id;
 								var item_tmp = angular.copy(response.data.data);
 								item.title = item_tmp.title;
 								item.comment = item_tmp.comment;
 								item.url = item_tmp.url;
 								item.username = item_tmp.username;
+								item.category_id = item_tmp.category_id;
 								item.password_hidden = item_tmp.password_hidden;
 								item.pwd_displayed = false;
 
@@ -278,6 +290,19 @@ angular.module('mpmApp', [])
 								item.pwd_strength_size = item.pwd_strength_size + "%";
 
 								item.toEdit = !item.toEdit;
+
+								if ($scope.category != "all") {
+									var items = [];
+									for (var i = 0; i < $scope.items.length; i++) {
+										if ($scope.items[i]._id == item._id) {
+											if (old_cat == item.category_id)
+												items.push($scope.items[i]);
+										} else {
+											items.push($scope.items[i]);
+										}
+									};
+									$scope.items = items;
+								}
 								UIkit.notify("Item saved", "success");
 							}
 						},

@@ -14,11 +14,11 @@ router.get('/items', function(req, res, next) {
 		};
 	else
 		options = {
-			category: category,
+			category_id: category,
 			user_id: req.session.user_id
 		};
 	req.models.Item.find(options,
-		"_id title url username password_hidden",
+		"_id title url username password_hidden category_id",
 		function(err, items) {
 			if (err) {
 				return res.send(JSON.stringify({
@@ -133,6 +133,7 @@ router.post('/item', function(req, res, next) {
 				item.password_hidden = pwd_hidden;
 				item.password_strength = strength(req.body.item_password) * 100;
 				item.comment = req.body.item_comment;
+				item.category_id = req.body.item_category;
 
 				item.save(function(err) {
 					if (err) return console.error(err);
@@ -140,7 +141,7 @@ router.post('/item', function(req, res, next) {
 							_id: req.body.item_id,
 							user_id: req.session.user_id
 						},
-						"_id title url username password_hidden comment password_strength",
+						"_id title url username password_hidden comment password_strength category_id",
 						function(err, c_item) {
 							if (err) {
 								return res.send(JSON.stringify({
