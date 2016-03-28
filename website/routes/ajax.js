@@ -203,6 +203,32 @@ router.post('/category', function(req, res, next) {
 		});
 });
 
+router.put('/category', function(req, res, next) {
+	res.set("Content-type", "application/json");
+	req.models.Category.findOne({
+		_id: req.body.id
+	}, function(err, category) {
+		if (err || category == null) {
+			return res.send(JSON.stringify({
+				"error": true,
+				"message": "The category is not available"
+			}));
+		}
+		category.title = req.body.title;
+		category.save(function(err) {
+			if (err) return console.error(err);
+			return res.send(JSON.stringify({
+				"error": false,
+				"message": "",
+				"data": {
+					_id: category._id,
+					title: category.title
+				}
+			}));
+		});
+	});
+});
+
 router.get('/categories', function(req, res, next) {
 	res.set("Content-type", "application/json");
 	req.models.Category.find({}, null, {

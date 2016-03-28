@@ -10,7 +10,10 @@ angular.module('mpmApp', [])
 		this.error = false;
 		this.bAddCategory = false;
 		this.category = "all";
+		this.categoryToRename = {};
 		this.new_category = "";
+		this.rename_category = "";
+		var modalRename = UIkit.modal("#modalRenameCategory");
 
 		function loadItems() {
 			ctrl.items = [];
@@ -105,6 +108,46 @@ angular.module('mpmApp', [])
 		this.cancelAddCategory = function() {
 			ctrl.bAddCategory = false;
 			ctrl.new_category = "";
+		}
+
+		this.renameCategoryModal = function(cat) {
+			ctrl.rename_category = cat.title;
+			ctrl.categoryToRename = cat;
+			modalRename.show();
+		}
+
+		this.renameCategory = function() {
+			$http({
+				method: "PUT",
+				url: "/ajax/category",
+				data: {
+					id: ctrl.categoryToRename._id,
+					title: ctrl.rename_category
+				}
+			}).then(
+				function successCallback(response) {
+					if (response.data.error) {
+						UIkit.notify(response.data.message, "danger");
+					} else {
+						UIkit.notify("Category renammed", "success");
+						ctrl.categoryToRename = {};
+						var categories = [];
+						for (var i = 0; i < ctrl.categories.length; i++) {
+							if (ctrl.categories[i]._id != response.data.data._id) {
+								categories.push(ctrl.categories[i]);
+							} else {
+								categories.push(response.data.data);
+							}
+						};
+						ctrl.categories = categories;
+					}
+				},
+				function errorCallback(response) {
+					UIkit.notify("An error occured, please try again", "danger");
+					ctrl.categoryToRename = {};
+				}
+			);
+			modalRename.hide();
 		}
 
 	})
