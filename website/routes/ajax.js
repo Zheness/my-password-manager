@@ -229,6 +229,24 @@ router.put('/category', function(req, res, next) {
 	});
 });
 
+router.delete('/category', function(req, res, next) {
+	res.set("Content-type", "application/json");
+	req.models.Category.findOne({
+		_id: req.query.id
+	}).remove(function(err) {
+		if (err) {
+			return res.send(JSON.stringify({
+				"error": true,
+				"message": "The category is not available"
+			}));
+		}
+		return res.send(JSON.stringify({
+			"error": false,
+			"message": ""
+		}));
+	});
+});
+
 router.get('/categories', function(req, res, next) {
 	res.set("Content-type", "application/json");
 	req.models.Category.find({}, null, {

@@ -11,9 +11,11 @@ angular.module('mpmApp', [])
 		this.bAddCategory = false;
 		this.category = "all";
 		this.categoryToRename = {};
+		this.categoryToDelete = {};
 		this.new_category = "";
 		this.rename_category = "";
 		var modalRename = UIkit.modal("#modalRenameCategory");
+		var modalDelete = UIkit.modal("#modalDeleteCategory");
 
 		function loadItems() {
 			ctrl.items = [];
@@ -148,6 +150,42 @@ angular.module('mpmApp', [])
 				}
 			);
 			modalRename.hide();
+		}
+
+		this.deleteCategoryModal = function(cat) {
+			ctrl.categoryToDelete = cat;
+			modalDelete.show();
+		}
+
+		this.deleteCategory = function() {
+			$http({
+				method: "DELETE",
+				url: "/ajax/category",
+				params: {
+					id: ctrl.categoryToDelete._id,
+				}
+			}).then(
+				function successCallback(response) {
+					if (response.data.error) {
+						UIkit.notify(response.data.message, "danger");
+					} else {
+						UIkit.notify("Category deleted", "success");
+						var categories = [];
+						for (var i = 0; i < ctrl.categories.length; i++) {
+							if (ctrl.categories[i]._id != ctrl.categoryToDelete._id) {
+								categories.push(ctrl.categories[i]);
+							}
+						};
+						ctrl.categories = categories;
+						ctrl.category = "all";
+						loadItems();
+					}
+				},
+				function errorCallback(response) {
+					UIkit.notify("An error occured, please try again", "danger");
+				}
+			);
+			modalDelete.hide();
 		}
 
 	})

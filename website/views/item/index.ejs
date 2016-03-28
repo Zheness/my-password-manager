@@ -6,7 +6,7 @@
 					<li ng-repeat="cat in list.categories" class="{{ list.category == cat._id ? 'uk-active' : '' }}">
 						<div class="uk-button-group uk-float-right" ng-show="cat._id != 'all' && list.category == cat._id">
 							<button class="uk-button uk-button-mini" type="button" data-uk-tooltip title="Rename" ng-click="list.renameCategoryModal(cat)"><span class="uk-icon-edit"></span></button>
-							<button class="uk-button uk-button-mini uk-button-danger" type="button" data-uk-tooltip title="Delete" ng-click="list.deleteCategory(cat)"><span class="uk-icon-trash"></span></button>
+							<button class="uk-button uk-button-mini uk-button-danger" type="button" data-uk-tooltip title="Delete" ng-click="list.deleteCategoryModal(cat)"><span class="uk-icon-trash"></span></button>
 						</div>
 						<a href="" data-category="{{ cat._id }}" ng-click="list.changeCategory(cat._id)">{{ cat.title }}</a>
 					</li>
@@ -56,6 +56,20 @@
 				</div>
 				<div class="uk-modal-footer">
 					<button class="uk-button uk-button-primary" ng-click="list.renameCategory()">Save</button>
+					<button class="uk-button uk-modal-close"> Cancel</button>
+				</div>
+			</div>
+		</div>
+		<div id="modalDeleteCategory" class="uk-modal">
+			<div class="uk-modal-dialog">
+				<a class="uk-modal-close uk-close"></a>
+				<div class="uk-modal-header">
+					<h3>Delete Category</h3>
+				</div>
+				<p>Are you sure to delete the category?</p>
+				<p>All the items will be keeped.</p>
+				<div class="uk-modal-footer">
+					<button class="uk-button uk-button-danger" ng-click="list.deleteCategory()">Delete</button>
 					<button class="uk-button uk-modal-close"> Cancel</button>
 				</div>
 			</div>
