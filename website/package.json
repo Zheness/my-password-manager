@@ -32,6 +32,7 @@
     "password-maker": "^1.1.2",
     "serve-favicon": "~2.3.0",
     "session-file-store": "0.0.24",
+    "speakeasy": "^2.0.0",
     "strength": "^0.1.4"
   }
 }
