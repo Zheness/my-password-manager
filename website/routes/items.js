@@ -88,6 +88,7 @@ router.post('/add', function(req, res, next) {
 					password_hidden: pwd_hidden,
 					password_strength: strength(form.data.password) * 100,
 					comment: form.data.comment,
+					category_id: form.data.category,
 					user_id: req.session.user_id,
 				});
 

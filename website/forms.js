@@ -255,6 +255,12 @@ exports.form_add_item = forms.create({
 			validators.rangelength(2, 60)
 		]
 	}),
+	category: fields.string({
+		widget: widgets.select({
+			classes: ['uk-form-width-medium']
+		}),
+		choices: {}
+	}),
 	url: fields.url({
 		widget: widgets.text({
 			classes: ['uk-form-width-large']

@@ -41,6 +41,29 @@ $(function() {
 		field.val($("#pwdGen_pwd").val());
 		modal.hide();
 	});
+	$('#id_category').append($('<option>', {
+		value: "all",
+		text: "-None-"
+	}));
+	$.ajax({
+		url: "/ajax/categories",
+		type: 'GET',
+		timeout: 5000,
+		dataType: "json",
+		success: function(data) {
+			if (!data.error) {
+				$.each(data.data, function(i, item) {
+					$('#id_category').append($('<option>', {
+						value: item._id,
+						text: item.title
+					}));
+				});
+			}
+		},
+		error: function() {
+			UIkit.notify("An error occured, please try again", "danger");
+		}
+	});
 });
 
 function generatePassword() {
