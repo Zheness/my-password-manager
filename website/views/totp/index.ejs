@@ -1,0 +1,14 @@
+<ul class="uk-tab uk-tab-grid uk-margin-bottom">
+	<li class="uk-width-1-2"><a href="/item">Items</a></li>
+	<li class="uk-width-1-2 uk-active"><a href="/totp">TOTP</a></li>
+</ul>
+<div class="uk-grid">
+	<% for (var i = 0; i < items.length ; ++i) { %>
+	<div class="uk-width-1-4">
+		<div class="uk-panel uk-panel-box uk-panel-box-secondary">
+			<h3 class="uk-panel-title"><%= items[i].title %></h3>
+			<p class="uk-text-center uk-text-large uk-text-bold code_otp" data-id="<%= items[i]._id %>">000000</p>
+		</div>
+	</div>
+	<% } %>
+</div>
