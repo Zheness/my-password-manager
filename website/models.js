@@ -32,3 +32,8 @@ exports.Category = new mongoose.Schema({
 	title: String,
 	position: String,
 });
+
+exports.Totp = new mongoose.Schema({
+	title: String,
+	secret: String,
+});

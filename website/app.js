@@ -29,7 +29,8 @@ app.use(function(req, res, next) {
 	req.models = {
 		User: connection.model('User', models.User, 'users'),
 		Item: connection.model('Item', models.Item, 'items'),
-		Category: connection.model('Category', models.Category, 'categories')
+		Category: connection.model('Category', models.Category, 'categories'),
+		Totp: connection.model('Totp', models.Totp, 'totps')
 	};
 	next();
 });
