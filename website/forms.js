@@ -289,3 +289,23 @@ exports.form_add_item = forms.create({
 }, {
 	validatePastFirstError: true
 });
+
+exports.form_add_totp = forms.create({
+	title: fields.string({
+		required: true,
+		widget: widgets.text({
+			classes: ['uk-form-width-large']
+		}),
+		validators: [
+			validators.rangelength(2, 60)
+		]
+	}),
+	secret: fields.string({
+		required: true,
+		widget: widgets.text({
+			classes: ['uk-form-width-large']
+		})
+	})
+}, {
+	validatePastFirstError: true
+});

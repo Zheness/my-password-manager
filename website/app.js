@@ -17,6 +17,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var users_settings = require('./routes/users-settings');
 var items = require('./routes/items');
+var totp = require('./routes/totp');
 var ajax = require('./routes/ajax');
 
 var app = express();
@@ -142,6 +143,7 @@ app.use(function(req, res, next) {
 
 app.use('/', routes);
 app.use('/item', items);
+app.use('/totp', totp);
 app.use('/user', users);
 app.use('/user/settings', users_settings);
 app.use('/ajax', ajax);

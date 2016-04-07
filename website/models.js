@@ -36,4 +36,5 @@ exports.Category = new mongoose.Schema({
 exports.Totp = new mongoose.Schema({
 	title: String,
 	secret: String,
+	user_id: String,
 });
