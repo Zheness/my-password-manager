@@ -21,7 +21,7 @@
 			<div class="uk-width-1-4" ng-repeat="item in list.items">
 				<div class="uk-panel uk-panel-box uk-panel-box-secondary">
 					<h3 class="uk-panel-title">{{ item.title }}</h3>
-					<p class="uk-text-center uk-text-large uk-text-bold code_otp" data-id="{{ item._id }}">000000</p>
+					<p class="uk-text-center uk-text-large uk-text-bold code_otp" data-id="{{ item._id }}">{{ item.code }}</p>
 				</div>
 			</div>
 		</div>
