@@ -19,6 +19,7 @@ var users_settings = require('./routes/users-settings');
 var items = require('./routes/items');
 var totp = require('./routes/totp');
 var ajax = require('./routes/ajax');
+var ajaxtotp = require('./routes/ajax-totp');
 
 var app = express();
 
@@ -147,6 +148,7 @@ app.use('/totp', totp);
 app.use('/user', users);
 app.use('/user/settings', users_settings);
 app.use('/ajax', ajax);
+app.use('/ajax/totp', ajaxtotp);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

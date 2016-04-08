@@ -17,17 +17,17 @@ router.get('/', function(req, res, next) {
 		req.flash("warning", "You must be logged in to access this page");
 		return res.redirect("/user/sign-in");
 	}
-	options = {
-		user_id: req.session.user_id
-	};
-	req.models.Totp.find(options,
-		"_id title",
-		function(err, items) {
-			return res.render("totp/index", {
-				title: "List of TOTP items",
-				items: items
-			});
-		});
+	return res.render("totp/index", {
+		title: "List of TOTP items",
+		extraCSS: [
+			"/uikit/css/components/notify.almost-flat.min.css",
+		],
+		extraJS: [
+			"/uikit/js/components/notify.min.js",
+			"/angular/angular.min.js",
+			"/javascripts/totp-items.js",
+		]
+	});
 });
 
 router.get('/add', function(req, res, next) {

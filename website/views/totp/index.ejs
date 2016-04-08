@@ -1,14 +1,29 @@
-<ul class="uk-tab uk-tab-grid uk-margin-bottom">
-	<li class="uk-width-1-2"><a href="/item">Items</a></li>
-	<li class="uk-width-1-2 uk-active"><a href="/totp">TOTP</a></li>
-</ul>
-<div class="uk-grid">
-	<% for (var i = 0; i < items.length ; ++i) { %>
-	<div class="uk-width-1-4">
-		<div class="uk-panel uk-panel-box uk-panel-box-secondary">
-			<h3 class="uk-panel-title"><%= items[i].title %></h3>
-			<p class="uk-text-center uk-text-large uk-text-bold code_otp" data-id="<%= items[i]._id %>">000000</p>
+<div ng-app="mpmApp">
+	<ul class="uk-tab uk-tab-grid uk-margin-bottom">
+		<li class="uk-width-1-2"><a href="/item">Items</a></li>
+		<li class="uk-width-1-2 uk-active"><a href="/totp">TOTP</a></li>
+	</ul>
+	<div ng-controller="ListController as list">
+		<div class="uk-grid">
+			<div class="uk-width-1-1 uk-alert uk-alert-large uk-alert-danger" ng-show="list.error">
+				<h2>An error occured</h2>
+				<p>We can't reach the app, try to fix the problem by checking the following points:</p>
+				<ul>
+					<li>Check your internet connection</li>
+					<li>Check if JavaScript is enabled on your browser</li>
+					<li>Reload the page</li>
+				</ul>
+				<p>If everything is correct on your side, please try later. The issue may be temporary. If the issue persist, contact us.</p>
+			</div>
+			<div class="uk-width-1-1" ng-show="list.items.length == 0 && list.loader == false">
+				<p>There is no item to display.</p>
+			</div>
+			<div class="uk-width-1-4" ng-repeat="item in list.items">
+				<div class="uk-panel uk-panel-box uk-panel-box-secondary">
+					<h3 class="uk-panel-title">{{ item.title }}</h3>
+					<p class="uk-text-center uk-text-large uk-text-bold code_otp" data-id="{{ item._id }}">000000</p>
+				</div>
+			</div>
 		</div>
 	</div>
-	<% } %>
 </div>
