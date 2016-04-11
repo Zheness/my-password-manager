@@ -5,6 +5,9 @@
 	</ul>
 	<div ng-controller="ListController as list">
 		<div class="uk-grid">
+			<div class="uk-container-center uk-text-center" ng-show="list.loader">
+				<img src="/images/loader.gif" alt="Loading..." width="128" height="128" />
+			</div>
 			<div class="uk-width-1-1 uk-alert uk-alert-large uk-alert-danger" ng-show="list.error">
 				<h2>An error occured</h2>
 				<p>We can't reach the app, try to fix the problem by checking the following points:</p>

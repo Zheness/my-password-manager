@@ -16,9 +16,14 @@ router.get('/items', function(req, res, next) {
 					"message": "No item can be fetched"
 				}));
 			}
-			var totp_items = [];
+			var d = Math.floor(new Date().getTime() / 1000);
+			var nextTick = (30 - (d % 30)) * 1000;
+			var totp_items = {
+				nextTick: nextTick,
+				items: []
+			};
 			for (var i = 0; i < items.length; i++) {
-				totp_items.push({
+				totp_items.items.push({
 					_id: items[i]._id,
 					title: items[i].title,
 					code: speakeasy.totp({
