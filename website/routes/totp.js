@@ -20,11 +20,13 @@ router.get('/', function(req, res, next) {
 	return res.render("totp/index", {
 		title: "List of TOTP items",
 		extraCSS: [
+			"/stylesheets/circletimer.min.css",
 			"/uikit/css/components/notify.almost-flat.min.css",
 		],
 		extraJS: [
 			"/uikit/js/components/notify.min.js",
 			"/angular/angular.min.js",
+			"/javascripts/circletimer.min.js",
 			"/javascripts/totp-items.js",
 		]
 	});

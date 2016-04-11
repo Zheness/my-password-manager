@@ -6,6 +6,10 @@ angular.module('mpmApp', [])
 		this.error = false;
 		this.nextTick = 30000;
 
+		this.refreshNow = function() {
+			loadItems();
+		}
+
 		function loadItems() {
 			ctrl.items = [];
 			ctrl.loader = true;
@@ -27,6 +31,14 @@ angular.module('mpmApp', [])
 						this.timer = $interval(function() {
 							loadItems();
 						}, this.nextTick);
+						$("#timer").attr("data-time", this.nextTick);
+						$("#timer").circletimer({
+							timeout: this.nextTick,
+							onUpdate: function(elapsed) {
+								$("#timeLeft").text(Math.floor(($("#timer").attr("data-time") - Math.round(elapsed)) / 1000));
+							},
+						});
+						$("#timer").circletimer("start");
 					}
 				},
 				function errorCallback(response) {
