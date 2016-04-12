@@ -4,7 +4,7 @@
 		<li class="uk-width-1-2 uk-active"><a href="/totp">TOTP</a></li>
 	</ul>
 	<div ng-controller="ListController as list">
-		<div class="uk-grid">
+		<div class="uk-grid" ng-show="list.items.length != 0">
 			<div class="uk-width-2-10"><div id="timer" style="width:150px;height: 150px;margin: auto;"></div></div>
 			<div class="uk-width-8-10">
 				<p>The codes will be updated in <span class="uk-text-bold" id="timeLeft">30</span> seconds. <a href="" ng-click="list.refreshNow()">Click here</a> to refresh now.</p>

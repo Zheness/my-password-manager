@@ -57,18 +57,20 @@ angular.module('mpmApp', [])
 						ctrl.items = angular.copy(response.data.data.items);
 						ctrl.loader = false;
 						this.nextTick = angular.copy(response.data.data.nextTick);
-						$interval.cancel(this.timer);
-						this.timer = $interval(function() {
-							loadItems();
-						}, this.nextTick);
-						$("#timer").attr("data-time", this.nextTick);
-						$("#timer").circletimer({
-							timeout: this.nextTick,
-							onUpdate: function(elapsed) {
-								$("#timeLeft").text(Math.floor(($("#timer").attr("data-time") - Math.round(elapsed)) / 1000));
-							},
-						});
-						$("#timer").circletimer("start");
+						if (ctrl.items.length != 0) {
+							$interval.cancel(this.timer);
+							this.timer = $interval(function() {
+								loadItems();
+							}, this.nextTick);
+							$("#timer").attr("data-time", this.nextTick);
+							$("#timer").circletimer({
+								timeout: this.nextTick,
+								onUpdate: function(elapsed) {
+									$("#timeLeft").text(Math.floor(($("#timer").attr("data-time") - Math.round(elapsed)) / 1000));
+								},
+							});
+							$("#timer").circletimer("start");
+						}
 					}
 				},
 				function errorCallback(response) {
