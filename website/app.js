@@ -106,7 +106,7 @@ app.use(function(req, res, next) {
 					} else {
 						var difference = Date.now() - user.dateLastAction.getTime();
 						var resultInMinutes = Math.round(difference / 60000);
-						if (resultInMinutes >= 60) { // TODO change in prod
+						if (resultInMinutes >= 5) {
 							req.isTimeOver = true;
 							if (req.path.substring(0, 5) == "/ajax") {
 								return res.send({
