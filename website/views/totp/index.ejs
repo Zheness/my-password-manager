@@ -29,8 +29,22 @@
 			</div>
 			<div class="uk-width-1-4" ng-repeat="item in list.items">
 				<div class="uk-panel uk-panel-box uk-panel-box-secondary">
+					<button class="uk-button uk-button-danger uk-float-right uk-button-mini" data-uk-tooltip title="Remove" type="button" ng-click="list.deleteModal(item)"><span class="uk-icon-remove"></span></button>
 					<h3 class="uk-panel-title">{{ item.title }}</h3>
 					<p class="uk-text-center uk-text-large uk-text-bold code_otp" data-id="{{ item._id }}">{{ item.code }}</p>
+				</div>
+			</div>
+		</div>
+		<div id="modalDeleteItem" class="uk-modal">
+			<div class="uk-modal-dialog">
+				<a class="uk-modal-close uk-close"></a>
+				<div class="uk-modal-header">
+					<h3>Delete Item</h3>
+				</div>
+				<p>Are you sure to delete the item?</p>
+				<div class="uk-modal-footer">
+					<button class="uk-button uk-button-danger" ng-click="list.deleteItem()">Delete</button>
+					<button class="uk-button uk-modal-close"> Cancel</button>
 				</div>
 			</div>
 		</div>

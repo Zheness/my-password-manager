@@ -42,8 +42,8 @@ router.get('/items', function(req, res, next) {
 
 router.delete('/item', function(req, res, next) {
 	res.set("Content-type", "application/json");
-	req.models.Item.findOne({
-		_id: req.query.item_id,
+	req.models.Totp.findOne({
+		_id: req.query.id,
 		user_id: req.session.user_id
 	}).remove(function(err) {
 		if (err) {

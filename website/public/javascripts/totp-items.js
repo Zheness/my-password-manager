@@ -5,9 +5,39 @@ angular.module('mpmApp', [])
 		this.loader = true;
 		this.error = false;
 		this.nextTick = 30000;
+		this.itemToDelete = {};
+		var modalDelete = UIkit.modal("#modalDeleteItem");
 
 		this.refreshNow = function() {
 			loadItems();
+		}
+
+		this.deleteModal = function(item) {
+			ctrl.itemToDelete = item;
+			modalDelete.show();
+		}
+
+		this.deleteItem = function() {
+			$http({
+				method: "DELETE",
+				url: "/ajax/totp/item",
+				params: {
+					id: ctrl.itemToDelete._id,
+				}
+			}).then(
+				function successCallback(response) {
+					if (response.data.error) {
+						UIkit.notify(response.data.message, "danger");
+					} else {
+						UIkit.notify("Item deleted", "success");
+						loadItems();
+					}
+				},
+				function errorCallback(response) {
+					UIkit.notify("An error occured, please try again", "danger");
+				}
+			);
+			modalDelete.hide();
 		}
 
 		function loadItems() {
