@@ -137,10 +137,7 @@ router.post('/email', function(req, res, next) {
 					user.email = form.data.email;
 					user.save(function(err) {
 						if (err) return console.error(err);
-						form = form.bind({
-							email: "",
-							confirm: "",
-						});
+						form = forms.form_settings_email;
 						req.flash("success", "Your email has been saved");
 						return reloadPage(res, form, "Edit your email", "user/settings-email");
 					});
