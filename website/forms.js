@@ -261,13 +261,10 @@ exports.form_add_item = forms.create({
 		}),
 		choices: {}
 	}),
-	url: fields.url({
+	url: fields.string({
 		widget: widgets.text({
 			classes: ['uk-form-width-large']
-		}),
-		validators: [
-			validators.url
-		]
+		})
 	}),
 	username: fields.string({
 		required: true,
