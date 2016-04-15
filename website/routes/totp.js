@@ -58,7 +58,7 @@ router.post('/add', function(req, res, next) {
 
 				var new_totp = req.models.Totp({
 					title: form.data.title,
-					secret: form.data.secret,
+					secret: form.data.secret.replace(/ /g, ""),
 					user_id: req.session.user_id,
 				});
 
