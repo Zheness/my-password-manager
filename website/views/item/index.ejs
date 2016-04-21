@@ -5,7 +5,7 @@
 	</ul>
 	<div ng-controller="ListController as list">
 		<div class="uk-grid">
-			<div class="uk-width-medium-2-10">
+			<div class="uk-width-medium-2-10 uk-hidden-small">
 				<ul class="uk-tab uk-tab-left">
 					<li ng-repeat="cat in list.categories" class="{{ list.category == cat._id ? 'uk-active' : '' }}">
 						<div class="uk-button-group uk-float-right" ng-show="cat._id != 'all' && list.category == cat._id">
@@ -24,7 +24,29 @@
 					</li>
 				</ul>
 			</div>
-			<div class="uk-width-medium-8-10">
+			<div class="uk-width-small-1-1 uk-visible-small">
+				<a data-uk-toggle="{target:'#menuCategories', animation:'uk-animation-fade'}">Categories (display/hide)</a>
+				<ul class="uk-subnav uk-subnav-pill uk-margin-small-top" id="menuCategories">
+					<li ng-repeat="cat in list.categories" class="{{ list.category == cat._id ? 'uk-active' : '' }} uk-width-1-1 uk-text-center">
+						<a href="" data-category="{{ cat._id }}" ng-click="list.changeCategory(cat._id)" class="uk-width-1-1">{{ cat.title }}
+							<div class="uk-button-group uk-float-right" ng-show="cat._id != 'all' && list.category == cat._id">
+								<button class="uk-button uk-button-mini" type="button" data-uk-tooltip title="Rename" ng-click="list.renameCategoryModal(cat)"><span class="uk-icon-edit"></span></button>
+								<button class="uk-button uk-button-mini uk-button-danger" type="button" data-uk-tooltip title="Delete" ng-click="list.deleteCategoryModal(cat)"><span class="uk-icon-trash"></span></button>
+							</div>
+						</a>
+					</li>
+					<li class="uk-width-1-1 uk-text-center" ng-hide="list.bAddCategory"><a href="" ng-click="list.displayAddCategory()" class="uk-width-1-1"><span class="uk-icon-plus"></span> Add category</a></li>
+					<li ng-show="list.bAddCategory" class="uk-text-center uk-form tabInputCatgeory">
+						<input type="text" class="uk-width-1-1" ng-model="list.new_category">
+					</li>
+					<li ng-show="list.bAddCategory" class="uk-text-center uk-margin-top">
+						<button class="uk-button uk-button-primary uk-button-small" ng-click="list.addCategory()"><span class="uk-icon-save"></span> Save</button>
+						<button class="uk-button uk-button-small" ng-click="list.cancelAddCategory()"><span class="uk-icon-undo"></span> Cancel</button>
+					</li>
+				</ul>
+			</div>
+			<div class="uk-margin-bottom uk-visible-small"></div>
+			<div class="uk-width-small-1-1 uk-width-medium-8-10">
 				<div class="uk-container-center uk-text-center" ng-show="list.loader">
 					<img src="/images/loader.gif" alt="Loading..." width="128" height="128" />
 				</div>

@@ -15,8 +15,8 @@
 	<% } %>
 </head>
 <body>
-	<div class="uk-container uk-container-center uk-margin-top uk-margin-large-bottom">
-		<nav class="uk-navbar uk-margin-large-bottom">
+	<div class="uk-container uk-container-center uk-margin-top">
+		<nav class="uk-navbar">
 			<% if (user_infos === null) { %>
 			<a href="#offcanvas" class="uk-navbar-toggle uk-visible-small" data-uk-offcanvas></a>
 			<a class="uk-navbar-brand uk-navbar-center uk-visible-small" href="/"><img src="/images/logo.png" alt="My Password Manager"></a>
@@ -56,6 +56,8 @@
 			</div>
 			<% } %>
 		</nav>
+		<div class="uk-margin-large-bottom uk-hidden-small"></div>
+		<div class="uk-margin-bottom uk-visible-small"></div>
 		<% while(message = flash.shift()) { %>
 		<div class="uk-alert uk-alert-<%= message.type  %>" data-uk-alert>
 			<a href="" class="uk-alert-close uk-close"></a>
