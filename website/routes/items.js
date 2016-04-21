@@ -59,23 +59,18 @@ router.post('/add', function(req, res, next) {
 		return res.redirect("/user/sign-in");
 	}
 	var form = forms.form_add_item;
-	console.log("1");
 
 	form.handle(req, {
 		success: function(form) {
-				console.log("1b");
 			req.models.User.findOne({
 				_id: req.session.user_id
 			}, function(err, user) {
-				console.log("2");
 				if (err) return console.error(err);
-				console.log("3");
 				var pwd_hidden = "";
 				var max_length = form.data.password.length;
 				for (var i = 0; i < max_length; i++) {
 					pwd_hidden += "*";
 				};
-				console.log("4");
 
 				var pv_key = CryptoJS.AES.decrypt(req.session.password, user.tmp_pk).toString(CryptoJS.enc.Utf8);
 				var is_unlocked = CryptoJS.AES.decrypt(user.unlocked_token, pv_key).toString(CryptoJS.enc.Utf8);
@@ -84,7 +79,6 @@ router.post('/add', function(req, res, next) {
 					req.flash("danger", "Your current main password is incorrect");
 					return reloadPage(res, form, "Add an item", "item/add");
 				}
-				console.log("5");
 
 				var new_item = req.models.Item({
 					title: form.data.title,
@@ -97,10 +91,8 @@ router.post('/add', function(req, res, next) {
 					category_id: form.data.category,
 					user_id: req.session.user_id,
 				});
-				console.log("6");
 
 				new_item.save(function(err) {
-					console.log("7");
 					if (err) return console.error(err);
 					form = forms.form_add_item;
 					req.flash("success", "The new item has been saved");
@@ -109,12 +101,10 @@ router.post('/add', function(req, res, next) {
 			});
 		},
 		error: function(form) {
-			console.log("8");
 			req.flash("danger", "The form contains errors");
 			return reloadPage(res, form, "Add an item", "item/add");
 		},
 		empty: function(form) {
-			console.log("9");
 			return reloadPage(res, form, "Add an item", "item/add");
 		}
 	});
