@@ -275,7 +275,7 @@ exports.form_add_item = forms.create({
 	password: fields.password({
 		required: true,
 		widget: widgets.password({
-			classes: ['uk-form-width-medium pwdShowHideGenerate']
+			classes: ['pwdShowHideGenerate']
 		})
 	}),
 	comment: fields.string({
