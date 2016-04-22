@@ -4,13 +4,13 @@
 		<li class="uk-width-1-2 uk-active"><a href="/totp">TOTP</a></li>
 	</ul>
 	<div ng-controller="ListController as list">
-		<div class="uk-grid" ng-show="list.items.length != 0">
-			<div class="uk-width-2-10"><div id="timer" style="width:150px;height: 150px;margin: auto;"></div></div>
-			<div class="uk-width-8-10">
+		<div class="uk-grid uk-margin-bottom" ng-show="list.items.length != 0">
+			<div class="uk-width-medium-2-10"><div id="timer" style="width:150px;height: 150px;margin: auto;"></div></div>
+			<div class="uk-width-medium-8-10">
 				<p>The codes will be updated in <span class="uk-text-bold" id="timeLeft">30</span> seconds. <a href="" ng-click="list.refreshNow()">Click here</a> to refresh now.</p>
 			</div>
 		</div>
-		<div class="uk-grid">
+		<div class="">
 			<div class="uk-container-center uk-text-center" ng-show="list.loader">
 				<img src="/images/loader.gif" alt="Loading..." width="128" height="128" />
 			</div>
@@ -27,7 +27,7 @@
 			<div class="uk-width-1-1" ng-show="list.items.length == 0 && list.loader == false">
 				<p>There is no item to display.</p>
 			</div>
-			<div class="uk-width-1-4" ng-repeat="item in list.items">
+			<div class="uk-width-small-1-1 uk-width-medium-1-4" ng-repeat="item in list.items">
 				<div class="uk-panel uk-panel-box uk-panel-box-secondary">
 					<button class="uk-button uk-button-danger uk-float-right uk-button-mini" data-uk-tooltip title="Remove" type="button" ng-click="list.deleteModal(item)"><span class="uk-icon-remove"></span></button>
 					<h3 class="uk-panel-title">{{ item.title }}</h3>
