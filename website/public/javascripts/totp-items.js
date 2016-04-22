@@ -43,6 +43,7 @@ angular.module('mpmApp', [])
 		function loadItems() {
 			ctrl.items = [];
 			ctrl.loader = true;
+			ctrl.error = false;
 			$http({
 				method: "GET",
 				url: "/ajax/totp/items",
